@@ -10,8 +10,10 @@ input=$(cat)
 cwd=$(printf '%s' "$input" | jq -r '.cwd // empty')
 [ -n "$cwd" ] || cwd=$PWD
 
+# Compaction continues the same sitting, so the check-in clock keeps running.
 session_id=$(printf '%s' "$input" | jq -r '.session_id // empty')
-if [ -n "$session_id" ]; then
+started_by=$(printf '%s' "$input" | jq -r '.source // empty')
+if [ -n "$session_id" ] && [ "$started_by" != compact ]; then
     sessions=${CLAUDE_PLUGIN_DATA:-${TMPDIR:-/tmp}/johns-way}/sessions
     mkdir -p "$sessions"
     date +%s > "$sessions/$session_id.start"

@@ -32,6 +32,32 @@ test_justfile_without_a_check_recipe_passes() {
     check
 }
 
+# Puts a stub uv on the PATH that records its arguments in uv.log.
+stub_uv() {
+    mkdir -p stubbin
+    printf '#!/usr/bin/env bash\necho "$*" >> "%s/uv.log"\n' "$PWD" > stubbin/uv
+    chmod +x stubbin/uv
+    export PATH=$PWD/stubbin:$PATH
+}
+
+test_pyproject_without_a_justfile_runs_pytest_and_ruff_through_uv() {
+    make_repo
+    stub_uv
+    printf '[project]\nname = "t"\nversion = "0"\n' > pyproject.toml
+    check
+    assert_eq "run pytest -q
+run ruff check ." "$(cat uv.log)"
+}
+
+test_pyproject_at_the_repository_root_is_found_from_a_subdirectory() {
+    make_repo
+    stub_uv
+    printf '[project]\nname = "t"\nversion = "0"\n' > pyproject.toml
+    mkdir sub && cd sub || return 1
+    check
+    assert_contains "$(cat ../uv.log)" "run pytest -q"
+}
+
 test_cooldown_violation_fails_before_the_check_target() {
     make_repo
     printf 'check:\n    echo "ran check"\n' > justfile

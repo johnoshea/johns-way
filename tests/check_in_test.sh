@@ -39,6 +39,12 @@ test_the_limit_is_configurable() {
     assert_contains "$(JOHNS_WAY_CHECKIN_MINUTES=4 check_in)" "Session check-in"
 }
 
+test_compaction_keeps_the_start_time() {
+    started_minutes_ago 61
+    echo '{"hook_event_name": "SessionStart", "session_id": "s1", "source": "compact"}' | "$root/hooks/session-start.sh" >/dev/null
+    assert_contains "$(check_in)" "Session check-in"
+}
+
 test_session_start_records_the_start_and_clears_a_previous_notification() {
     mkdir -p "$CLAUDE_PLUGIN_DATA/sessions"
     touch "$CLAUDE_PLUGIN_DATA/sessions/s1.notified"

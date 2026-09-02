@@ -36,11 +36,38 @@ test_git_commit_passes_when_the_check_passes() {
     hook 'git add -A && git commit -m "x"'
 }
 
-test_git_commit_with_dash_c_is_recognised() {
+test_git_commit_with_dash_c_checks_that_repository() {
+    make_repo
+    printf 'check:\n    true\n' > justfile
+    mkdir other && (cd other && make_repo && failing_justfile)
+    output=$(hook "git -C $PWD/other commit -m x"); code=$?
+    assert_eq 2 "$code"
+    assert_contains "$output" "tests broke"
+}
+
+test_no_verify_is_only_looked_for_in_the_commit_itself() {
+    make_repo
+    printf 'check:\n    true\n' > justfile
+    hook 'git commit -m "x" && git log -n 1'
+    hook 'git commit -m "Add -n flag"; ls -n'
+}
+
+test_runs_the_check_from_a_subdirectory() {
     make_repo
     failing_justfile
-    output=$(hook "git -C $PWD commit -m x"); code=$?
+    mkdir sub && cd sub || return 1
+    output=$(hook 'git commit -m "x"'); code=$?
     assert_eq 2 "$code"
+    assert_contains "$output" "tests broke"
+}
+
+test_skips_for_our_pre_commit_hook_from_a_subdirectory() {
+    make_repo
+    failing_justfile
+    printf '#!/usr/bin/env bash\n# Installed by johns-way.\nexec /nonexistent/check.sh\n' > .git/hooks/pre-commit
+    chmod +x .git/hooks/pre-commit
+    mkdir sub && cd sub || return 1
+    hook 'git commit -m "x"'
 }
 
 test_no_verify_is_blocked_outright() {

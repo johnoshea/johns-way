@@ -13,11 +13,15 @@ lookup=${JOHNS_WAY_RELEASE_DATE:-$script_dir/release-date.sh}
 threshold=$(date -u -v-${cooldown_days}d +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
     || date -u -d "$cooldown_days days ago" +%Y-%m-%dT%H:%M:%SZ)
 
+# Captured first so that a failure to enumerate fails the check rather than
+# leaving the loop nothing to read.
+changed=$("$script_dir/changed-dependencies.sh" "${1:-.}")
+
 violations=""
 failures=""
 while read -r kind name version date; do
     [ -n "$kind" ] || continue
-    if [ "$kind" = action ] || [ "${date:-unknown}" = unknown ]; then
+    if [ "${date:-unknown}" = unknown ]; then
         if ! date=$("$lookup" "$kind" "$name" "$version" 2>/dev/null); then
             failures="$failures
   $name $version"
@@ -28,7 +32,7 @@ while read -r kind name version date; do
         violations="$violations
   $name $version, released $date"
     fi
-done < <("$script_dir/changed-dependencies.sh" "${1:-.}")
+done <<< "$changed"
 
 if [ -n "$failures" ]; then
     echo "Dependency cooldown: no release date could be found for these versions, so they cannot be verified:$failures" >&2

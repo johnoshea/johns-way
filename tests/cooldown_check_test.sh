@@ -88,6 +88,12 @@ EOF
     assert_contains "$output" "mystery 1.0.0"
 }
 
+test_failure_to_enumerate_dependencies_fails_closed() {
+    make_stub
+    "$root/hooks/cooldown-check.sh" "$PWD/nonexistent" 2>/dev/null && return 1
+    return 0
+}
+
 test_action_dates_are_looked_up() {
     make_repo
     make_stub
