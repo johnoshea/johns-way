@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Prints the release date of a dependency. See hooks/release-date.sh.
+exec "$(dirname "$0")/../hooks/release-date.sh" "$@"

@@ -77,7 +77,7 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **debugging.** Any bug, failing test, error, or unexpected behaviour. Read the whole error. Reproduce it. Check what changed. Find the cheapest test that settles the question before adding instrumentation. One hypothesis at a time, stated before touching code. Failing test, then the fix. Three failed fixes means a design problem: stop and discuss. Done only when the cause can be stated in a sentence.
 
-**reviewing-own-work.** End of every medium and full task, before the done claim. Dispatches one subagent with fresh context. Inputs: the spec, or the chat design pasted in, and the diff since the first task commit. Two lenses: the code matches the spec, and the code passes the [Design rules](#design-rules). Reports findings, prints `crit`, and stops.
+**reviewing-own-work.** End of every medium and full task, before the done claim. Dispatches the plugin's reviewer agent, defined under `agents/`, once with fresh context. Inputs: the spec, or the chat design pasted in, and the diff since the first task commit. Two lenses: the code matches the spec, and the code passes the [Design rules](#design-rules). Reports findings, prints `crit`, and stops.
 
 **reviewing-prs.** Other people's pull requests. Reads the linked issue and the description for intent. Reviews the diff for correctness first, then design. Posts comments with `gh`. Approves or requests changes only when asked to.
 
@@ -93,7 +93,7 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **install-pre-commit.** User-invoked. Runs the installer in `bin/` that writes the repository pre-commit hook.
 
-**dependencies.** Adding or updating a dependency, or editing CI. Takes the newest version that clears the 14-day cooldown. Uses the latest Python release that clears it. Updates every GitHub Action when touching CI, looking each version up. Keeps the CI Python version equal to the one in pyproject.toml in the same commit.
+**dependencies.** Adding or updating a dependency, or editing CI. Takes the newest version that clears the 14-day cooldown, looking release dates up with `johns-way-release-date` from `bin/`. Uses the latest Python release that clears it. Updates every GitHub Action when touching CI, looking each version up. Keeps the CI Python version equal to the one in pyproject.toml in the same commit.
 
 ## Hooks
 
@@ -206,6 +206,7 @@ This repository is the plugin. Layout:
 skills/<name>/SKILL.md
 hooks/hooks.json
 hooks/*.sh
+agents/<name>.md              subagent definitions, referenced as johns-way:<name>
 bin/                          executables on the Bash PATH while the plugin is enabled
 tests/
 docs/

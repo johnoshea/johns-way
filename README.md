@@ -29,6 +29,7 @@ Runs shellcheck over the hooks, tests, and `bin/`, the plugin validator, and the
 skills/<name>/SKILL.md       one skill per folder
 hooks/hooks.json             hook registrations
 hooks/*.sh                   hook scripts
+agents/<name>.md             subagent definitions, referenced as johns-way:<name>
 bin/                         executables on the Bash PATH while the plugin is enabled
 tests/                       test runner, helpers, and tests
 docs/design.md               the design
