@@ -18,6 +18,7 @@ for file in "$root"/tests/*_test.sh; do
     for fn in $(declare -F | awk '{print $3}' | grep '^test_'); do
         count=$((count + 1))
         tmp=$(mktemp -d)
+        export CLAUDE_PLUGIN_DATA="$tmp/plugin-data"
         # errexit inside the subshell makes the first failing assertion end the test.
         if (cd "$tmp" || exit 1; set -e; "$fn"); then
             echo "ok   $fn"

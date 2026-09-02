@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Installs the johns-way check as the git pre-commit hook of the current
+# repository, so commits made outside Claude Code pass the same check.
+# Refuses to overwrite a pre-commit hook that is not ours.
+set -euo pipefail
+
+hook=$(git rev-parse --git-path hooks/pre-commit)
+check=$(cd "$(dirname "$0")/../hooks" && pwd)/check.sh
+
+if [ -e "$hook" ] && ! grep -q johns-way "$hook"; then
+    echo "A pre-commit hook already exists at $hook and is not ours. Merge it by hand." >&2
+    exit 1
+fi
+
+mkdir -p "$(dirname "$hook")"
+cat > "$hook" <<EOF
+#!/usr/bin/env bash
+# Installed by johns-way. Runs the same check as the Claude Code commit hook.
+exec "$check" "\$(git rev-parse --show-toplevel)"
+EOF
+chmod +x "$hook"
+echo "Installed $hook"
