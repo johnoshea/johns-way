@@ -89,6 +89,10 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **domain-language.** Whenever a term is discussed, a class or function with domain meaning is added, or CONTEXT.md is edited. Adapted from Matt Pocock's domain-modeling skill. See [Domain language](#domain-language).
 
+**design-rules.** Shaping an interface, adding an abstraction, parameter, or branch, or judging a diff for complexity. Holds the rules under [Design rules](#design-rules) in one place, applied by spec, implementing, and reviewing-own-work.
+
+**install-pre-commit.** User-invoked. Runs the installer in `bin/` that writes the repository pre-commit hook.
+
 **dependencies.** Adding or updating a dependency, or editing CI. Takes the newest version that clears the 14-day cooldown. Uses the latest Python release that clears it. Updates every GitHub Action when touching CI, looking each version up. Keeps the CI Python version equal to the one in pyproject.toml in the same commit.
 
 ## Hooks
@@ -97,11 +101,11 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **Session check-in.** A PostToolUse hook on every tool compares the time since the session started with a limit. The limit comes from the `JOHNS_WAY_CHECKIN_MINUTES` environment variable and is 60 by default. The first time the limit is passed, the hook delivers one message to the model: if a medium task is in progress, stop and ask with AskUserQuestion whether to continue as medium or upgrade to full. It fires once per session. Start times live under the plugin's data directory, keyed by session id. Delivery uses the hook's `additionalContext` output, which PostToolUse supports.
 
-**Commit check.** PreToolUse on Bash when the command contains `git commit`. Runs `just check` if a justfile exists, otherwise the language's test and lint commands. Blocks the commit with exit code 2 on failure, printing the output. Then runs the cooldown check on the staged lockfile diff.
+**Commit check.** PreToolUse on Bash when the command runs `git commit`. Runs the cooldown check, then `just check` when the justfile has a check recipe, otherwise pytest and ruff through uv when there is a pyproject.toml. Blocks the commit with exit code 2 on failure, printing the output. A commit with `--no-verify` is blocked outright. When the repository's own pre-commit hook is ours, git runs the same check, so this hook steps aside rather than run it twice.
 
-**Cooldown check.** Reads the staged diff of `uv.lock`. For each package whose version changed, fetches the release date from PyPI. For each GitHub Action version changed under `.github/workflows/`, fetches the tag's commit date through `gh api`. Blocks if any is under 14 days old. Fails closed when offline.
+**Cooldown check.** Reads the staged `uv.lock`. Every registry package whose name and version pair is new is checked against the upload time uv records for its files, with no network. A package without one is looked up on PyPI. For each `uses:` line added under `.github/workflows/`, the date of the commit the ref points at is fetched through `gh api`. Blocks if any is under 14 days old. A version whose date cannot be found blocks too.
 
-**Repo pre-commit hook.** A command installs the same check script as a git pre-commit hook in the current repo, so manual commits get the same protection. Both hooks call one script.
+**Repo pre-commit hook.** `johns-way-install-pre-commit`, on the Bash PATH while the plugin is enabled, installs the same check script as the git pre-commit hook of the current repo, so manual commits get the same protection. Both hooks call one script. The install-pre-commit skill runs it.
 
 **Existing hooks.** enforce-uv and ask-dont-announce move into the plugin, and their settings.json entries are removed in the same change so that only one copy fires. process-downshift is removed; the routing rules make it unnecessary. The sidekick hooks are unrelated and stay in settings.json.
 
@@ -162,7 +166,7 @@ During requirements and spec writing, terms the user uses are checked against it
 
 ## Design rules
 
-These rules live in three places: the spec's Approach section, the implementing skill's refactor step, and the review's second lens.
+These rules live in the design-rules skill. The spec's Approach section, the implementing skill's refactor step, and the review's second lens all apply them.
 
 - Each abstraction earns its keep. A function shorter than the words needed to describe it is collapsed.
 - A reviewer can follow the diff without reading the rest of the module, or the diff carries a comment saying why.
@@ -202,6 +206,8 @@ This repository is the plugin. Layout:
 skills/<name>/SKILL.md
 hooks/hooks.json
 hooks/*.sh
+bin/                          executables on the Bash PATH while the plugin is enabled
+tests/
 docs/
 ```
 

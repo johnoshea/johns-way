@@ -1,0 +1,20 @@
+---
+name: design-rules
+description: The design questions applied when writing a spec's approach, in the refactor step of TDD, and as the second lens of review. Consult when shaping an interface, deciding whether to add an abstraction, parameter, or branch, or judging a diff for complexity.
+---
+
+# Design rules
+
+Complexity is the enemy. Ask these while writing, not as a checklist afterwards.
+
+- **Does each abstraction earn its keep?** A function whose body is shorter than the words needed to describe it is collapsed into its caller. A module that hides a lot behind a small interface is kept.
+- **Could a reviewer follow this diff without reading the rest of the module?** If not, the diff is doing too much, or it needs a comment saying why.
+- **If you removed this parameter, option, or branch, who would notice?** If nobody, remove it.
+- **Are you patching around a design problem?** Fix the interface. When that is out of scope, file an issue and say so.
+- **Before a try/except or a null check: can the interface change so the error cannot happen?**
+- **One adapter is a hypothetical seam. Two adapters is a real one.** Add an interface only when a second implementation exists.
+- **The deletion test.** Imagine deleting the module. If complexity vanishes, it was a pass-through. If complexity reappears across its callers, it was earning its keep.
+- **Functional core, imperative shell.** Pure logic takes data and returns data. Effects live at the edges. Test the core directly and the shell thinly.
+- **Strategic DDD only.** The project's language lives in CONTEXT.md and contexts are module boundaries. Aggregates, repositories, and domain events are out unless a spec argues for them.
+- **Easy to delete beats easy to extend.** Design for the change you can name today.
+- **The change test.** For each change you can name, count the files that would move. One is good. Many means a decision has leaked.

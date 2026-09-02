@@ -20,7 +20,7 @@ To test changes without linking, start Claude Code with `claude --plugin-dir .`.
 just check
 ```
 
-Runs shellcheck over the hooks and tests, the plugin validator, and the tests under `tests/`. The tests are plain bash: every function named `test_*` in `tests/*_test.sh` runs in its own temporary directory.
+Runs shellcheck over the hooks, tests, and `bin/`, the plugin validator, and the tests under `tests/`. The tests are plain bash: every function named `test_*` in `tests/*_test.sh` runs in its own temporary directory.
 
 ## Layout
 
@@ -29,6 +29,7 @@ Runs shellcheck over the hooks and tests, the plugin validator, and the tests un
 skills/<name>/SKILL.md       one skill per folder
 hooks/hooks.json             hook registrations
 hooks/*.sh                   hook scripts
+bin/                         executables on the Bash PATH while the plugin is enabled
 tests/                       test runner, helpers, and tests
 docs/design.md               the design
 ```
