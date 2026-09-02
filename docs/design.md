@@ -107,7 +107,11 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **Repo pre-commit hook.** `johns-way-install-pre-commit`, on the Bash PATH while the plugin is enabled, installs the same check script as the git pre-commit hook of the current repo, so manual commits get the same protection. Both hooks call one script. The install-pre-commit skill runs it.
 
-**Existing hooks.** enforce-uv and ask-dont-announce move into the plugin, and their settings.json entries are removed in the same change so that only one copy fires. process-downshift is removed; the routing rules make it unnecessary. The sidekick hooks are unrelated and stay in settings.json.
+**enforce-uv.** PreToolUse on Bash. Blocks direct python, python3, and pip invocations in favour of uv.
+
+**ask-dont-announce.** Stop. Blocks a turn whose last message announces a decision and invites an objection, and sends the model back to ask with AskUserQuestion.
+
+Both were hooks in settings.json before the plugin existed and moved into it, with their settings.json entries removed in the same change so that only one copy fires. The process-downshift hook that also lived there was removed; the routing rules make it unnecessary. The sidekick hooks are unrelated and stay in settings.json.
 
 **No Stop hook.** A Stop hook could block the model from ending its turn while tracked files have uncommitted changes. It is left out. The commit check already guarantees every commit passes tests, and the model stops legitimately in that state when it asks about a spec amendment or after a failed fix.
 
@@ -214,7 +218,7 @@ docs/
 
 The plugin is named `johns-way`. Renaming later means changing the name field in plugin.json and the symlink directory.
 
-It loads by symlinking the repository into `~/.claude/skills/johns-way/`, which Claude Code picks up without an install step. `claude --plugin-dir .` tests changes. Skills are namespaced `/johns-way:<skill>`.
+It loads by symlinking the repository into `~/.claude/skills/johns-way/`, which `just install` does and which Claude Code picks up without an install step. `claude --plugin-dir .` tests changes. Skills are namespaced `/johns-way:<skill>`.
 
 ## Build order
 

@@ -33,4 +33,4 @@ Implementation runs in the main context. Subagents do two jobs only: fact-findin
 
 ## Definition of done
 
-Before saying done, fixed, or works: run the project's check target, which is `just check` where a justfile exists and otherwise the test and lint commands, and paste the real output. "Should work" means unfinished. Say what was skipped and why.
+Before saying done, fixed, or works: run the project's check target, which is `just check` where a justfile exists and otherwise the test and lint commands, and paste the real output. "Should work" means unfinished. Say what was skipped and why. README.md, CLAUDE.md, and CONTEXT.md say what the code now does, updated in the same commit as the code.
