@@ -118,7 +118,7 @@ Sections, in order:
 3. **Approach.** Components and data, and which parts are core and which are shell. Core takes data and returns data. Shell performs effects. No code.
 4. **Alternatives considered.** Rejected options and why. This is the decision record.
 5. **Open questions.**
-6. **Tasks.** A numbered list. Each task is one commit and gives a one-line title and the tests it adds.
+6. **Tasks.** A numbered list. Each task is one commit and gives a one-line title and the tests it adds. A task line starts with its number and a period. The SessionStart hook counts only such lines under this heading.
 7. **Amendments.** Empty at first. Dated entries, each giving what changed and why.
 
 One page unless the approach needs more.
@@ -214,7 +214,7 @@ It loads by symlinking the repository into `~/.claude/skills/johns-way/`, which 
 Each step is usable on its own before the next starts.
 
 1. routing and the SessionStart hook.
-2. tdd, implementing, and the commit hook.
+2. tdd, implementing, the commit hook, and the session check-in hook with its start-time recording.
 3. requirements and spec.
 4. reviewing-own-work.
 5. debugging, spike, domain-language.
