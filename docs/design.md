@@ -13,7 +13,7 @@ It keeps the parts of Superpowers that earn their time: Canon TDD, systematic de
 - **One document per feature.** The spec holds the design and the ordered task list. There is no separate plan.
 - **Git is the progress record.** Each task is one commit carrying a trailer that names the spec and the task number. The spec is never edited to track progress.
 - **Hooks hold mechanical rules. Skills hold procedures. CLAUDE.md holds judgment rules that apply every turn.** A rule goes in the first of those three that can hold it.
-- **Every skill fits in one read.** Under 60 lines each. Under 800 lines in total.
+- **Every skill fits in one read.** Each SKILL.md is under 60 lines, and all of them together under 800. A skill that runs a periodic audit may carry reference files under `references/`, loaded on demand and outside the budget.
 
 ## Paths
 
@@ -80,6 +80,8 @@ Each entry gives the trigger, what the skill does, and what it produces.
 **reviewing-own-work.** End of every medium and full task, before the done claim. Dispatches the plugin's reviewer agent, defined under `agents/`, once with fresh context. Inputs: the spec, or the chat design pasted in, and the diff since the first task commit. Two lenses: the code matches the spec, and the code passes the [Design rules](#design-rules). Reports findings, prints `crit`, and stops.
 
 **reviewing-prs.** Other people's pull requests. Reads the linked issue and the description for intent. Reviews the diff for correctness first, then design. Posts comments with `gh`. Approves or requests changes only when asked to.
+
+**review-architecture.** User-invoked. A deep, periodic design review in the style of Ousterhout's A Philosophy of Software Design, judged by the complexity it adds. Maps the modules and their dependencies before judging anything, weighs deep versus shallow modules and information leakage above all, designs the top finding twice, and reports a verdict, the structural issues that matter, lesser findings, what is good, and one next step. Its detection catalogue and worked examples live under `references/`. Runs in the main context: a session opened for the review is already fresh.
 
 **pull-requests.** Creating pull requests. Description: what and why in a few sentences, alternatives rejected, how to verify. Links the issue. Proposes a split above roughly 400 changed lines.
 
@@ -208,6 +210,7 @@ This repository is the plugin. Layout:
 ```
 .claude-plugin/plugin.json
 skills/<name>/SKILL.md
+skills/<name>/references/*.md reference material a review skill loads on demand
 hooks/hooks.json
 hooks/*.sh
 agents/<name>.md              subagent definitions, referenced as johns-way:<name>

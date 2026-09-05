@@ -41,6 +41,7 @@ Runs shellcheck over the hooks, tests, and `bin/`, the plugin validator, and the
 ```
 .claude-plugin/plugin.json   manifest
 skills/<name>/SKILL.md       one skill per folder
+skills/<name>/references/    reference material a review skill loads on demand
 hooks/hooks.json             hook registrations
 hooks/*.sh                   hook scripts
 agents/<name>.md             subagent definitions, referenced as johns-way:<name>
