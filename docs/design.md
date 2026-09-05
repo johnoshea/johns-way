@@ -211,6 +211,8 @@ This repository is the plugin. Layout:
 
 ```
 .claude-plugin/plugin.json
+.claude-plugin/marketplace.json lists this repository as a one-plugin marketplace
+.github/workflows/check.yml   runs just check on every push
 skills/<name>/SKILL.md
 skills/<name>/references/*.md reference material a review skill loads on demand
 hooks/hooks.json
@@ -219,11 +221,14 @@ agents/<name>.md              subagent definitions, referenced as johns-way:<nam
 bin/                          executables on the Bash PATH while the plugin is enabled
 tests/
 docs/
+CONTEXT.md                    the glossary
 ```
 
-The plugin is named `johns-way`. Renaming later means changing the name field in plugin.json and the symlink directory.
+The plugin is named `johns-way`. Renaming later means changing the name field in plugin.json and marketplace.json and the symlink directory.
 
-It loads by symlinking the repository into `~/.claude/skills/johns-way/`, which `just install` does and which Claude Code picks up without an install step. `claude --plugin-dir .` tests changes. Skills are namespaced `/johns-way:<skill>`.
+The repository is its own marketplace: marketplace.json lists the one plugin with its source at the repository root. Adding the repository as a marketplace and installing `johns-way@johns-way` from it puts a copy under Claude Code's plugin cache. That copy updates only when the version in plugin.json changes.
+
+For development, `just install` symlinks the repository into `~/.claude/skills/johns-way/`, which Claude Code loads as `johns-way@skills-dir` without an install step. Only one of the two copies is enabled at a time, or every hook fires twice. `claude --plugin-dir .` tests changes. Skills are namespaced `/johns-way:<skill>`.
 
 ## Build order
 

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "johns-way",
+  "description": "One way of working for Claude Code: requests sized before work starts, tests before code, a spec before large work, git as the progress record, and hooks that enforce the mechanical rules.",
+  "owner": {
+    "name": "John O'Shea"
+  },
+  "plugins": [
+    {
+      "name": "johns-way",
+      "source": "./",
+      "description": "Skills and hooks for how John works: routing by size, Canon TDD, specs, review, and git-tracked progress."
+    }
+  ]
+}
