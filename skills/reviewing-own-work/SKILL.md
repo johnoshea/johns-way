@@ -13,7 +13,7 @@ Dispatch the `johns-way:reviewer` agent once, with:
 
 - the spec's path, or for medium work the chat design pasted in full
 - the base commit: the commit before the first task commit, so that `git diff <base>..HEAD` is the whole change
-- the project's check command
+- the project's check target
 
 The reviewer has fresh context on purpose. Do not summarise the change for it. Give it the spec and the range and let it read.
 
