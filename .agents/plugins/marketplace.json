@@ -1,0 +1,10 @@
+{
+  "name": "johns-way",
+  "interface": {"displayName": "John's Way"},
+  "plugins": [{
+    "name": "johns-way",
+    "source": {"source": "local", "path": "./"},
+    "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+    "category": "Productivity"
+  }]
+}

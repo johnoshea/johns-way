@@ -1,4 +1,4 @@
-# Design: a workflow plugin for Claude Code
+# Design: a workflow plugin for Claude Code and Codex
 
 ## Purpose
 
@@ -229,6 +229,14 @@ The plugin is named `johns-way`. Renaming later means changing the name field in
 The repository is its own marketplace: marketplace.json lists the one plugin with its source at the repository root. Adding the repository as a marketplace and installing `johns-way@johns-way` from it puts a copy under Claude Code's plugin cache. That copy updates only when the version in plugin.json changes.
 
 For development, `just install` symlinks the repository into `~/.claude/skills/johns-way/`, which Claude Code loads as `johns-way@skills-dir` without an install step. Only one of the two copies is enabled at a time, or every hook fires twice. `claude --plugin-dir .` tests changes. Skills are namespaced `/johns-way:<skill>`.
+
+### Codex packaging
+
+The repository also exposes `.codex-plugin/plugin.json` and a Codex marketplace at `.agents/plugins/marketplace.json`, with the plugin source at the repository root. This keeps skills, helpers, and default `hooks/hooks.json` shared. Codex provides the compatibility plugin environment variables and canonical Bash hook input. The Stop hook prefers the supplied `last_assistant_message`; Claude transcripts remain the fallback when that field is absent.
+
+`just install` installs both hosts; `just install-claude` and `just install-codex` select one. The Codex installer refreshes a generated snapshot under `.local/codex/plugins/johns-way`, adds a cache suffix to its version, registers `johns-way-local` through the CLI, and reinstalls. The tracked version remains a release version. Deleted source files disappear on reinstall. The public and local copies should not both be enabled.
+
+Codex requires a new thread after installation and user trust of hook definitions. Routing maps question tools and helper paths to the host, and the reviewing-own-work skill uses a fresh general subagent with the reviewer instructions. Without subagent support, review runs in a separate thread. The pre-commit skill remains explicitly user-requested, with Codex's `allow_implicit_invocation: false` policy.
 
 ## Build order
 

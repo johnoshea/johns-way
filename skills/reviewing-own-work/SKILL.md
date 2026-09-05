@@ -17,6 +17,8 @@ Dispatch the `johns-way:reviewer` agent once, with:
 
 The reviewer has fresh context on purpose. Do not summarise the change for it. Give it the spec and the range and let it read.
 
+In Codex, use a fresh subagent with the instructions in `../../agents/reviewer.md` (relative to this skill), omitting its Claude-specific YAML frontmatter. If subagents are unavailable, ask the user to run that review in a new thread; do not claim a fresh-context review happened in the implementation thread.
+
 ## Report
 
 Relay the reviewer's findings as they are, grouped by lens: matches the spec, then design rules. Say which findings you disagree with and why. Fix nothing yet.

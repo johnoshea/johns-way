@@ -1,8 +1,14 @@
 check: lint test
 
-# Link this repository into ~/.claude/skills so Claude Code loads it as johns-way@skills-dir.
-install:
+# Install the checkout for both hosts; rerun after edits for Codex.
+install: install-claude install-codex
+
+install-claude:
+    mkdir -p ~/.claude/skills
     ln -sfn "{{justfile_directory()}}" ~/.claude/skills/johns-way
+
+install-codex:
+    bin/johns-way-install-codex
 
 test:
     tests/run.sh

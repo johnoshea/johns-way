@@ -30,3 +30,19 @@ test_missing_transcript_passes() {
     output=$(echo '{"transcript_path": "/nonexistent", "stop_hook_active": false}' | "$root/hooks/ask-dont-announce.sh")
     assert_eq "" "$output"
 }
+
+test_codex_last_message_blocks_without_transcript() {
+    output=$(echo '{"last_assistant_message":"I will use A unless you object."}' | "$root/hooks/ask-dont-announce.sh")
+    assert_contains "$output" '"decision":"block"'
+}
+
+test_codex_empty_last_message_does_not_read_old_transcript() {
+    echo '{"type":"assistant","message":{"content":[{"type":"text","text":"Unless you object"}]}}' > transcript.jsonl
+    output=$(jq -n --arg path "$PWD/transcript.jsonl" '{last_assistant_message:"",transcript_path:$path}' | "$root/hooks/ask-dont-announce.sh")
+    assert_eq "" "$output"
+}
+
+test_codex_stop_does_not_block_twice() {
+    output=$(echo '{"last_assistant_message":"Unless you object", "stop_hook_active":true}' | "$root/hooks/ask-dont-announce.sh")
+    assert_eq "" "$output"
+}

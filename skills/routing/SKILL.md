@@ -5,6 +5,8 @@ description: How every request is sized and which path it takes. Injected into e
 
 # Routing
 
+In Codex, interpret AskUserQuestion as the available question tool, or a direct question followed by waiting when no tool is available. Resolve plugin skills by name from the installed skills list. Resolve `bin/` commands and `agents/reviewer.md` relative to this skill's plugin root (`../..`); Codex need not add `bin/` to PATH. Project judgment rules live in AGENTS.md in Codex and CLAUDE.md in Claude Code.
+
 Classify every request before starting work. If the user names a path, use it as stated. Otherwise pick the smallest path the facts below allow, announce it in one line, and proceed. The classification has no approval gate. If the session status below reports an unfinished spec or uncommitted changes, mention that in one line before starting.
 
 ## Paths

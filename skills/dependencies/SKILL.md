@@ -14,6 +14,8 @@ Take the newest version that clears the cooldown. Look the release date up; neve
     johns-way-release-date pypi <name> <version>
     johns-way-release-date action <owner/repo> <ref>
 
+If the command is not on PATH, use `../../bin/johns-way-release-date` relative to this skill's directory.
+
 The first prints a package version's release time; PyPI's release history page lists the candidates. The second prints the date of the commit an Action's ref points at, which is what counts, because moving tags such as `v5` are re-pointed.
 
 ## Python

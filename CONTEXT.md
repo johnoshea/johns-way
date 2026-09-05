@@ -45,6 +45,9 @@ _Avoid_: done criteria, acceptance, DoD.
 **Reviewer**: the plugin's subagent that reviews a finished change with fresh context, against its spec and the design rules.
 _Avoid_: critic, auditor, second opinion.
 
+**Local install**: the development checkout linked into Claude Code and copied into a generated Codex marketplace, refreshed with `just install`.
+_Avoid_: deployment, release.
+
 ## Relationships
 
 A **Spec** holds many **Tasks**, and each **Task** is completed by one commit carrying **Trailers**.

@@ -1,6 +1,6 @@
 # johns-way
 
-This repository is a Claude Code plugin, and the plugin is its own marketplace. [docs/design.md](docs/design.md) is the design: the paths, the skills, the hooks, and the reasons for each. A change in behaviour updates the design, README.md, and CONTEXT.md in the same commit.
+This repository is a Claude Code and Codex plugin, and the plugin is its own marketplace. [docs/design.md](docs/design.md) is the design: the paths, the skills, the hooks, and the reasons for each. A change in behaviour updates the design, README.md, and CONTEXT.md in the same commit.
 
 ## Check
 
@@ -31,3 +31,5 @@ Installed copies update only when `version` in `.claude-plugin/plugin.json` chan
 ## Development install
 
 `just install` links this checkout into `~/.claude/skills/`, where it loads as `johns-way@skills-dir`. A machine with the marketplace copy installed keeps only one of the two enabled. Edits to a skill apply at once. Edits to hooks need `/reload-plugins`.
+
+Codex uses `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`. `just install` also runs `just install-codex`, which refreshes a generated copy under `.local/codex/` and reinstalls it with a cache suffix. `just install-claude` installs only Claude Code. Codex needs a new thread after reinstall and explicit hook trust through `/hooks`. Release versions are maintained in both manifests.

@@ -1,0 +1,18 @@
+{
+  "name": "johns-way",
+  "version": "0.2.0",
+  "description": "Routing by size, Canon TDD, specs, review, and git-tracked progress, with workflow hooks.",
+  "author": {"name": "John O'Shea"},
+  "repository": "https://github.com/johnoshea/johns-way",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "John's Way",
+    "shortDescription": "Tests first, work sized, progress in git",
+    "longDescription": "An opinionated development workflow with skills for routing, requirements, TDD, specs, debugging, and review, plus mechanical checks through hooks.",
+    "developerName": "John O'Shea",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Use johns-way to size this task and follow its development workflow."]
+  }
+}

@@ -1,0 +1,5 @@
+interface:
+  display_name: Install pre-commit
+  short_description: Install the johns-way git commit check on request
+policy:
+  allow_implicit_invocation: false

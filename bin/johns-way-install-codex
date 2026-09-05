@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Stage a fresh local plugin without changing the tracked release version.
+set -euo pipefail
+root=$(cd "$(dirname "$0")/.." && pwd)
+for tool in codex jq rsync; do
+    command -v "$tool" >/dev/null || { echo "Required command missing: $tool" >&2; exit 1; }
+done
+marketplace="$root/.local/codex"
+plugin="$marketplace/plugins/johns-way"
+mkdir -p "$plugin" "$marketplace/.agents/plugins"
+# Only our generated copy is replaced; removed source files must disappear too.
+rsync -ac --delete --exclude .git --exclude .local --exclude .agents \
+    "$root/" "$plugin/"
+version=$(jq -r '.version | split("+")[0]' "$root/.codex-plugin/plugin.json")
+jq --arg version "$version+codex.$(date -u +%Y%m%d%H%M%S).$$" \
+    '.version = $version' "$root/.codex-plugin/plugin.json" > "$plugin/.codex-plugin/plugin.json"
+cat > "$marketplace/.agents/plugins/marketplace.json" <<'JSON'
+{
+  "name": "johns-way-local",
+  "interface": {"displayName": "John's Way (local)"},
+  "plugins": [{
+    "name": "johns-way",
+    "source": {"source": "local", "path": "./plugins/johns-way"},
+    "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+    "category": "Productivity"
+  }]
+}
+JSON
+codex plugin marketplace add "$marketplace"
+codex plugin add johns-way@johns-way-local
+echo 'Start a new Codex thread. Review and trust the plugin hooks in /hooks.'

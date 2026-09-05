@@ -19,6 +19,10 @@ active=$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null) 
 # stop_hook_active means this hook already blocked once and Claude is coming
 # back round. Blocking again is how a Stop hook turns into an infinite loop.
 [ "$active" = "true" ] && exit 0
+if printf '%s' "$input" | jq -e 'has("last_assistant_message")' >/dev/null; then
+    # Codex supplies the message directly; its transcript is not a stable API.
+    last=$(printf '%s' "$input" | jq -r '.last_assistant_message // ""')
+else
 [ -z "$transcript" ] && exit 0
 [ -f "$transcript" ] || exit 0
 
@@ -31,6 +35,7 @@ last=$(tail -n 400 "$transcript" 2>/dev/null \
       | .message.content[]?
       | select(.type == "text")
       | .text] | last // ""' 2>/dev/null) || exit 0
+fi
 
 [ -z "$last" ] && exit 0
 
