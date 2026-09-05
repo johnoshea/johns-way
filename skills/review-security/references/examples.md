@@ -16,11 +16,11 @@ def show_invoice(invoice_id: int):
 
 **Review (Must):**
 
-The route is authenticated and unauthorised. Any logged-in user can read any invoice by changing the number in the URL, and the ids are sequential, so enumerating every invoice in the system is a loop. Path: log in with a free account, request `/invoices/1` upward. Gain: disclosure of every customer's billing data. This is CWE-639, authorisation bypass through a user-controlled key, and the top category in the OWASP Top 10:2025 for a reason: the check that is missing here is the one every handler has to remember.
+The route is authenticated and unauthorised. Any logged-in user can read any invoice by changing the number in the URL, and the ids are sequential, so enumerating every invoice in the system is a loop. Path: log in with a free account, request `/invoices/1` upward. Gain: disclosure of every customer's billing data. This is CWE-639, authorisation bypass through a user-controlled key, and the top category in the OWASP Top 10 for a reason: the check that is missing here is the one every handler has to remember.
 
 Adding an `if invoice.account_id != current_user.account_id: abort(403)` line fixes this route and leaves the next route to make the same mistake. The fix that holds is to make the lookup itself scoped, so a handler cannot forget.
 
-**Designed twice, the two interfaces side by side:**
+**The two interfaces side by side:**
 
 ```
 Before (every handler must remember):     After (the lookup cannot forget):
@@ -110,7 +110,7 @@ delete(doc)
 
 **Review (Must):**
 
-When the policy service is slow or down, every action is allowed. That is a design decision, and the log line shows it was deliberate: availability was chosen over authorisation. Path: make the policy service time out, by load or by a request crafted to be slow, then do anything. Gain: elevation of privilege across the whole application at once. CWE-636, failing open, and the OWASP Top 10:2025 added a category for exactly this kind of exceptional-condition handling.
+When the policy service is slow or down, every action is allowed. That is a design decision, and the log line shows it was deliberate: availability was chosen over authorisation. Path: make the policy service time out, by load or by a request crafted to be slow, then do anything. Gain: elevation of privilege across the whole application at once. CWE-636, failing open, and the OWASP Top 10 has a category for exactly this kind of exceptional-condition handling.
 
 There is a second, quieter problem in the interface. The function returns a boolean, so every caller has to remember to test it and to test it the right way round. One caller that writes `if is_allowed(...)` with the branches swapped, or forgets the check, is the next finding.
 

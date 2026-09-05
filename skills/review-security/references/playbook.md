@@ -1,6 +1,6 @@
 # Security review playbook
 
-A detection catalogue. Start from a symptom you can see in the code. Each entry gives what an attacker gains, the principle behind the fix, the fix, and the overcorrection to avoid. Entries are ordered by leverage, matching the priority list in SKILL.md. Each names the CWE ids and the OWASP Top 10:2025 category it falls under, so a finding can cite them. Jump to the flag you are looking at.
+A detection catalogue. Start from a symptom you can see in the code. Each entry gives what an attacker gains, the principle behind the fix, the fix, and the overcorrection to avoid. Entries are ordered by leverage, matching the priority list in SKILL.md. Each names its CWE ids and, where one applies, its OWASP category, so a finding can cite them. Jump to the flag you are looking at.
 
 ## Python calibration
 
@@ -25,27 +25,27 @@ A detection catalogue. Start from a symptom you can see in the code. Each entry 
 5. [Path traversal and file handling](#5-path-traversal-and-file-handling)
 6. [Deserialisation of untrusted data](#6-deserialisation-of-untrusted-data)
 7. [Server-side request forgery](#7-server-side-request-forgery)
-8. [Confused deputy and backflow of trust](#8-confused-deputy-and-backflow-of-trust)
-9. [Secrets and sensitive data exposure](#9-secrets-and-sensitive-data-exposure)
-10. [Cryptographic failures](#10-cryptographic-failures)
-11. [Fail open and silent catch](#11-fail-open-and-silent-catch)
-12. [Unbounded resource use](#12-unbounded-resource-use)
-13. [Input validation at the boundary](#13-input-validation-at-the-boundary)
-14. [Insecure defaults and configuration](#14-insecure-defaults-and-configuration)
-15. [Predictability](#15-predictability)
-16. [Races between check and use](#16-races-between-check-and-use)
-17. [Dependencies and supply chain](#17-dependencies-and-supply-chain)
+8. [Input validation at the boundary](#8-input-validation-at-the-boundary)
+9. [Confused deputy and backflow of trust](#9-confused-deputy-and-backflow-of-trust)
+10. [Secrets and sensitive data exposure](#10-secrets-and-sensitive-data-exposure)
+11. [Cryptographic failures](#11-cryptographic-failures)
+12. [Predictability](#12-predictability)
+13. [Fail open and silent catch](#13-fail-open-and-silent-catch)
+14. [Unbounded resource use](#14-unbounded-resource-use)
+15. [Races between check and use](#15-races-between-check-and-use)
+16. [Dependencies and supply chain](#16-dependencies-and-supply-chain)
+17. [Insecure defaults and configuration](#17-insecure-defaults-and-configuration)
 18. [Missing audit](#18-missing-audit)
 
 ## 1. Missing or incorrect authorisation
 
-CWE-862, CWE-863, CWE-284, CWE-639. OWASP A01 Broken Access Control.
+CWE-862, CWE-863, CWE-284, CWE-639, CWE-269. OWASP: Broken Access Control.
 
 **Symptom.** A handler or function acts on a resource without checking that the caller may. Checks present in some handlers and absent in others. An object id taken from the request and used directly, so any authenticated user can read or change any object. Authorisation enforced in the UI or the client only. A role or tenant id read from a client-supplied claim, header, or field. Admin functions distinguished only by an obscure URL.
 
-**Gain.** Elevation of privilege, then disclosure or tampering of whatever the missing check guarded. This is the top category in the OWASP Top 10:2025 and appears in nearly every application tested.
+**Gain.** Elevation of privilege, then disclosure or tampering of whatever the missing check guarded. This is the top category in the OWASP Top 10 and appears in nearly every application tested.
 
-**Principle.** Complete mediation: every access to every object is checked for authority. Fail-safe defaults: access rests on permission, never on the absence of a rule.
+**Principle.** Authorisation is the second term of Kohnfelder's Gold Standard. Authentication establishes who the principal is. Authorisation allows only the actions that principal may take. Auditing keeps a reliable record of them. Complete mediation: every access to every object is checked for authority. Fail-safe defaults: access rests on permission, never on the absence of a rule. Separation of privilege: a high-value action needs two independent conditions.
 
 **Fix.** One place that decides, keyed on the authenticated principal and the object, applied by construction rather than by remembering: a decorator on every handler, a query scoped to the principal in the data access layer, or a service method that takes the principal as a parameter. Deny by default. Object ids resolve through the principal's scope, so an id outside it does not resolve.
 
@@ -55,7 +55,7 @@ Related: authentication, confused deputy.
 
 ## 2. Authentication that can be bypassed
 
-CWE-306, CWE-287. OWASP A07 Authentication Failures.
+CWE-306, CWE-287. OWASP: Authentication Failures.
 
 **Symptom.** A critical function reachable without authentication: an internal endpoint, a debug route, a message consumer that trusts the sender. Tokens compared with `==`. Session ids, reset codes, or API keys that are short, sequential, or derived from user data. Passwords stored with a fast hash. Reset tokens that are reusable or never expire. Login without rate limiting. A session that survives a password change or logout.
 
@@ -71,7 +71,7 @@ Related: missing authorisation, predictability, cryptography.
 
 ## 3. Injection into queries, commands, and code
 
-CWE-89, CWE-78, CWE-77, CWE-94, CWE-1336. OWASP A05 Injection.
+CWE-89, CWE-78, CWE-77, CWE-94, CWE-1336. OWASP: Injection.
 
 **Symptom.** SQL built by string formatting, f-strings, or concatenation, including in an ORM's raw-query escape hatch. A query for a document store built from request fields. `subprocess` with `shell=True`, `os.system`, or a command string that includes user data. `eval`, `exec`, or `__import__` on anything from outside. A user-supplied string rendered as a template. LDAP filters, XPath, or log lines built the same way.
 
@@ -87,7 +87,7 @@ Related: web output, deserialisation, input validation.
 
 ## 4. Injection into web output
 
-CWE-79, CWE-352. OWASP A05 Injection, A01 Broken Access Control.
+CWE-79, CWE-352. OWASP: Injection, Broken Access Control.
 
 **Symptom.** Autoescape off. `|safe`, `Markup()`, or `mark_safe()` applied to user data. HTML or JavaScript built by string concatenation. User data inside a script block, an attribute, a URL, or an inline event handler. A state-changing request served on GET. Forms without CSRF tokens. Session cookies without `SameSite`, `HttpOnly`, or `Secure`.
 
@@ -103,7 +103,7 @@ Related: injection into queries, insecure defaults.
 
 ## 5. Path traversal and file handling
 
-CWE-22, CWE-434. OWASP A01 Broken Access Control, A06 Insecure Design.
+CWE-22, CWE-434. OWASP: Broken Access Control, Insecure Design.
 
 **Symptom.** A path built from a request value, where the value can contain `..` or be absolute. A filename taken from an upload and used as-is. A file type judged by extension or by the client's content type. Archives extracted without checking each member's resolved path. Files served from a directory by user-supplied name. Symlinks followed inside a user-writable tree.
 
@@ -119,11 +119,11 @@ Related: injection, input validation.
 
 ## 6. Deserialisation of untrusted data
 
-CWE-502, CWE-611. OWASP A08 Software or Data Integrity Failures, A02 Security Misconfiguration.
+CWE-502, CWE-611. OWASP: Software or Data Integrity Failures, Security Misconfiguration.
 
 **Symptom.** `pickle`, `marshal`, `shelve`, `jsonpickle`, or `yaml.load` with a loader other than `SafeLoader` on data that crossed a trust boundary: a request body, a queue message, a cache entry another service can write, an uploaded file. XML parsed by the standard library with external entities on. Objects rebuilt from a class name carried in the data. A signed or encrypted blob deserialised before the signature is checked.
 
-**Gain.** Code execution in the deserialising process.
+**Gain.** Elevation of privilege: code execution in the deserialising process.
 
 **Principle.** Reluctance to trust: trust is an explicit choice backed by evidence. A data format carries data.
 
@@ -135,11 +135,11 @@ Related: injection, input validation, confused deputy.
 
 ## 7. Server-side request forgery
 
-CWE-918. OWASP A01 Broken Access Control.
+CWE-918. OWASP: Broken Access Control.
 
 **Symptom.** The server fetches a URL that came from a request: a webhook target, an image to proxy, an import-from-URL feature, a link preview, a discovery endpoint. Redirects followed without re-checking the destination. DNS resolved once for the check and again for the connection. Cloud metadata endpoints reachable from the process.
 
-**Gain.** The attacker uses the server's network position and credentials: internal services, metadata endpoints that hand out cloud credentials, and anything behind the firewall.
+**Gain.** Elevation of privilege: the attacker uses the server's network position and credentials: internal services, metadata endpoints that hand out cloud credentials, and anything behind the firewall.
 
 **Principle.** Allowlists over blocklists. Least privilege for the process's network access.
 
@@ -149,9 +149,25 @@ CWE-918. OWASP A01 Broken Access Control.
 
 Related: input validation, confused deputy.
 
-## 8. Confused deputy and backflow of trust
+## 8. Input validation at the boundary
 
-CWE-441. OWASP A01 Broken Access Control.
+CWE-20, CWE-915. OWASP: Injection, Software or Data Integrity Failures.
+
+**Symptom.** Validation in some entry points and absent in others. Validation on the client only. A blocklist of bad values. Request fields written straight to a model, including ones the user may never set. Values used before they are checked. Types assumed from a hint rather than enforced. Data validated on write and trusted on read when another writer exists.
+
+**Gain.** Depends on the sink, which is why this entry is the root of most of the ones above.
+
+**Principle.** Allowlists over blocklists. Accept security responsibility: the boundary owns validation, and both sides of an interface agree who checks what.
+
+**Fix.** Validate once, at the trust boundary, into typed values with an allowlist of what is accepted. Reject rather than repair. Explicit field lists for anything written to a model. Everything inside the boundary works on validated types and never re-parses the raw request.
+
+**Overcorrection.** Validating the same value in every layer as a substitute for a boundary. Defence in depth adds an independent check at a second boundary; it does not scatter the first.
+
+Related: every injection entry, deserialisation.
+
+## 9. Confused deputy and backflow of trust
+
+CWE-441. OWASP: Broken Access Control.
 
 **Symptom.** A privileged service performs an action for a less privileged caller using its own authority, without carrying the caller's identity through, so a check that would have failed for the caller passes for the service. A background job that acts on ids from a queue anyone can write to. A lower-trust component that directs a higher-trust one: a client that tells the server which user it is, a plugin that drives its host, a build script that deploys, a third-party hook with broad access.
 
@@ -165,15 +181,15 @@ CWE-441. OWASP A01 Broken Access Control.
 
 Related: missing authorisation, dependencies.
 
-## 9. Secrets and sensitive data exposure
+## 10. Secrets and sensitive data exposure
 
-CWE-200, CWE-798, CWE-532, CWE-209. OWASP A01 Broken Access Control, A07 Authentication Failures, A09 Security Logging and Alerting Failures, A10 Mishandling of Exceptional Conditions.
+CWE-200, CWE-798, CWE-532, CWE-209. OWASP: Broken Access Control, Authentication Failures, Security Logging and Alerting Failures, Mishandling of Exceptional Conditions.
 
 **Symptom.** Credentials, keys, or tokens in source, in committed configuration, in a container image, or in a default value. Secrets in log lines, exception messages, stack traces returned to clients, URLs, or query strings. Debug mode or verbose errors in production. Whole records passed where one field was needed, so a callee or a log sees more than it should. Personal data kept without a reason. Sensitive data in client-side storage or in a cache another tenant can read.
 
 **Gain.** Disclosure, and every disclosed secret is spoofing waiting to happen.
 
-**Principle.** Least information: provide only the private information a call needs. Open design: security rests on the key, never on the code staying secret.
+**Principle.** Least information: provide only the private information a call needs. Open design: security rests on the key, never on the code staying secret. Least common mechanism: state shared between principals is a channel between them.
 
 **Fix.** Secrets from the environment or a secret manager, never from the repository. Error responses that say what the client needs, with the rest logged server-side. Redaction in the logging layer, by construction. Narrow data contracts: pass the fields, not the record. Delete what is no longer needed.
 
@@ -181,9 +197,9 @@ CWE-200, CWE-798, CWE-532, CWE-209. OWASP A01 Broken Access Control, A07 Authent
 
 Related: cryptography, audit, insecure defaults.
 
-## 10. Cryptographic failures
+## 11. Cryptographic failures
 
-CWE-327, CWE-330, CWE-338. OWASP A04 Cryptographic Failures.
+CWE-327, CWE-330, CWE-338. OWASP: Cryptographic Failures.
 
 **Symptom.** A homemade algorithm, protocol, or mode of operation. MD5 or SHA-1 for anything but checksums. A fast hash for passwords. `random` for keys, tokens, IVs, or salts. A fixed IV or nonce. ECB mode. Encryption without authentication. A key derived from a password without a proper key derivation function. TLS verification off, or a private CA trusted everywhere. Keys hardcoded, shared across environments, or never rotated.
 
@@ -197,9 +213,25 @@ CWE-327, CWE-330, CWE-338. OWASP A04 Cryptographic Failures.
 
 Related: predictability, secrets exposure.
 
-## 11. Fail open and silent catch
+## 12. Predictability
 
-CWE-755, CWE-636. OWASP A10 Mishandling of Exceptional Conditions.
+CWE-330, CWE-340, CWE-377. OWASP: Cryptographic Failures, Broken Access Control.
+
+**Symptom.** Sequential or timestamp-based ids exposed to users. Tokens, codes, or filenames from `random`, from a hash of user data, or from a counter. Temporary files with guessable names in a shared directory. Responses or timing that reveal whether an account exists.
+
+**Gain.** Disclosure by guessing, and tampering when a guessed id names something writable.
+
+**Principle.** Avoid predictability: anything predictable cannot be kept private.
+
+**Fix.** `secrets.token_urlsafe` for tokens, a random id for anything exposed, `tempfile.mkstemp` or `NamedTemporaryFile` for temporary files. Constant-time comparison and uniform responses where existence is sensitive.
+
+**Overcorrection.** Random ids for internal keys that are never exposed. The fix goes where the id crosses a boundary.
+
+Related: authentication, cryptography.
+
+## 13. Fail open and silent catch
+
+CWE-755, CWE-636. OWASP: Mishandling of Exceptional Conditions.
 
 **Symptom.** A broad `except` that passes, or logs and continues, around a security check, a signature verification, or a permission lookup. A check that returns `None` on error and a caller that treats anything but `False` as a pass. `assert` used to enforce a condition. A remote authorisation service that is unavailable and a fallback that allows. A partial write left in place after a failure. Cleanup that runs only on the success path.
 
@@ -213,7 +245,7 @@ CWE-755, CWE-636. OWASP A10 Mishandling of Exceptional Conditions.
 
 Related: unbounded resource use, missing authorisation.
 
-## 12. Unbounded resource use
+## 14. Unbounded resource use
 
 CWE-770, CWE-400, CWE-1333.
 
@@ -229,57 +261,9 @@ CWE-770, CWE-400, CWE-1333.
 
 Related: fail open, input validation.
 
-## 13. Input validation at the boundary
+## 15. Races between check and use
 
-CWE-20, CWE-915. OWASP A05 Injection, A08 Software or Data Integrity Failures.
-
-**Symptom.** Validation in some entry points and absent in others. Validation on the client only. A blocklist of bad values. Request fields written straight to a model, including ones the user may never set. Values used before they are checked. Types assumed from a hint rather than enforced. Data validated on write and trusted on read when another writer exists.
-
-**Gain.** Depends on the sink, which is why this entry is the root of most of the ones above.
-
-**Principle.** Allowlists over blocklists. Accept security responsibility: the boundary owns validation, and both sides of an interface agree who checks what.
-
-**Fix.** Validate once, at the trust boundary, into typed values with an allowlist of what is accepted. Reject rather than repair. Explicit field lists for anything written to a model. Everything inside the boundary works on validated types and never re-parses the raw request.
-
-**Overcorrection.** Validating the same value in every layer as a substitute for a boundary. Defence in depth adds an independent check at a second boundary; it does not scatter the first.
-
-Related: every injection entry, deserialisation.
-
-## 14. Insecure defaults and configuration
-
-CWE-1188, CWE-942, CWE-732. OWASP A02 Security Misconfiguration, A01 Broken Access Control.
-
-**Symptom.** Debug on, or switchable by an environment variable that defaults on. Cross-origin requests allowed from any origin with credentials. A server bound to all interfaces by default. World-readable or world-writable files created by the application. Default credentials. TLS optional. Security headers absent. A flag that disables a check, added for a test or a migration and never removed. Configuration that must be changed after deployment to be safe.
-
-**Gain.** Whatever the default exposes. Misconfiguration is the second category in the OWASP Top 10:2025 and was found in every application tested.
-
-**Principle.** Secure by default: the software is secure as deployed, and the operator loosens it explicitly.
-
-**Fix.** Restrictive defaults in code, with permissive settings requiring a named, explicit choice. Debug off unless a development flag is set. Restrictive file modes on creation. An allowlist of origins. The disabling flag removed when the reason for it is gone.
-
-**Overcorrection.** Hardening the configuration of an environment the code does not own. Report it separately.
-
-Related: dependencies, secrets exposure.
-
-## 15. Predictability
-
-CWE-330, CWE-340, CWE-377. OWASP A04 Cryptographic Failures, A01 Broken Access Control.
-
-**Symptom.** Sequential or timestamp-based ids exposed to users. Tokens, codes, or filenames from `random`, from a hash of user data, or from a counter. Temporary files with guessable names in a shared directory. Responses or timing that reveal whether an account exists.
-
-**Gain.** Disclosure by guessing, and tampering when a guessed id names something writable.
-
-**Principle.** Avoid predictability: anything predictable cannot be kept private.
-
-**Fix.** `secrets.token_urlsafe` for tokens, a random id for anything exposed, `tempfile.mkstemp` or `NamedTemporaryFile` for temporary files. Constant-time comparison and uniform responses where existence is sensitive.
-
-**Overcorrection.** Random ids for internal keys that are never exposed. The fix goes where the id crosses a boundary.
-
-Related: authentication, cryptography.
-
-## 16. Races between check and use
-
-CWE-367, CWE-362. OWASP A06 Insecure Design.
+CWE-367, CWE-362. OWASP: Insecure Design.
 
 **Symptom.** A check followed by an action on the same file, record, or balance with no lock or transaction between them. A balance read, compared, then debited. A file checked for existence or permissions, then opened. A temporary file created by name, then written. A one-time token checked, then marked used, in two statements.
 
@@ -293,25 +277,41 @@ CWE-367, CWE-362. OWASP A06 Insecure Design.
 
 Related: fail open, predictability.
 
-## 17. Dependencies and supply chain
+## 16. Dependencies and supply chain
 
-CWE-1104, CWE-829. OWASP A03 Software Supply Chain Failures, A08 Software or Data Integrity Failures.
+CWE-1104, CWE-829. OWASP: Software Supply Chain Failures, Software or Data Integrity Failures.
 
 **Symptom.** No lockfile, or one that deployment ignores. Packages installed from arbitrary URLs, from an unverified mirror, or at runtime by the application itself. A dependency pinned years back because upgrading broke something. Binary-only components, vendored copies with no upstream, or anything the team could not update within a day. A build or deploy step that runs code from a source it does not control. An auto-update mechanism with broader access than downloading and installing.
 
-**Gain.** Code execution with whatever the build, deploy, or runtime holds.
+**Gain.** Elevation of privilege: code execution with whatever the build, deploy, or runtime holds.
 
 **Principle.** An unpatchable component is a permanent vulnerability. A third-party hook gets the narrowest function that works.
 
-**Fix.** A lockfile that deployment honours, and the dependencies skill's cooldown. Nothing the team cannot update quickly. Hooks and update mechanisms restricted to the one function they need. Scanners handle known vulnerable versions; the review looks at the shape.
+**Fix.** A lockfile that deployment honours, and the dependencies skill's cooldown. Only components the team can update within a day. Hooks and update mechanisms restricted to the one function they need. Scanners handle known vulnerable versions; the review looks at the shape.
 
 **Overcorrection.** Listing every outdated package. That is a scanner's job. The finding is a dependency that cannot be updated or a path that runs uncontrolled code.
 
 Related: insecure defaults, confused deputy.
 
+## 17. Insecure defaults and configuration
+
+CWE-1188, CWE-942, CWE-732. OWASP: Security Misconfiguration, Broken Access Control.
+
+**Symptom.** Debug on, or switchable by an environment variable that defaults on. Cross-origin requests allowed from any origin with credentials. A server bound to all interfaces by default. World-readable or world-writable files created by the application. Default credentials. TLS optional. Security headers absent. A flag that disables a check, added for a test or a migration and never removed. Configuration that must be changed after deployment to be safe.
+
+**Gain.** Whatever the default exposes. Misconfiguration is the second category in the OWASP Top 10 and was found in every application tested.
+
+**Principle.** Secure by default: the software is secure as deployed, and the operator loosens it explicitly. Psychological acceptability: the secure setting is the easy one, so people keep it.
+
+**Fix.** Restrictive defaults in code, with permissive settings requiring a named, explicit choice. Debug off unless a development flag is set. Restrictive file modes on creation. An allowlist of origins. The disabling flag removed when the reason for it is gone.
+
+**Overcorrection.** Hardening the configuration of an environment the code does not own. Report it separately.
+
+Related: dependencies, secrets exposure.
+
 ## 18. Missing audit
 
-CWE-778. OWASP A09 Security Logging and Alerting Failures.
+CWE-778. OWASP: Security Logging and Alerting Failures.
 
 **Symptom.** Login, logout, privilege changes, payments, deletions, exports, and admin actions recorded without the principal, the target, the time, or the outcome, or not recorded at all. Logs the acting user can alter or delete. Failed attempts unrecorded, so an attack in progress is invisible. Logs that contain the secrets they are meant to protect.
 

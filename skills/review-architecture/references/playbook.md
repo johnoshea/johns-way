@@ -135,7 +135,7 @@ Principle: pull complexity downward.
 
 **Symptom.** A module keeps its own implementation simple by pushing work, decisions, or cleanup onto every caller. In Python: callers must remember to call `close()` because there is no context manager; callers must check a sentinel or status; callers must pass configuration the module could default; the same post-processing appears at every call site because the module returns something half finished.
 
-**Cost.** One simplification inside the module is paid for at every call site, and each caller can get it wrong.
+**Cost.** One simplification inside the module is paid for at every call site, and each caller can get it wrong. That is the wrong trade: a simple interface matters more than a simple implementation.
 
 **Refactor.** Pull the complexity down behind the interface. A context manager so cleanup cannot be forgotten. A finished result instead of a half-finished one. The sensible default. The common condition handled internally. The caller's job shrinks to stating intent.
 
@@ -268,7 +268,7 @@ Principle: code should be obvious. The catch-all for obscurity.
 
 **Symptom.** A reader has to work hard or guess to see what the code does or means. In Python: clever one-liners and dense comprehensions packing several steps; reliance on non-obvious truthiness or implicit conversion; behaviour that depends on a side effect or global state the reader cannot see; results that depend on subtle ordering. The test: would a competent developer guess wrong on first read?
 
-**Cost.** High cognitive load, and a wrong guess is an unknown-unknown bug.
+**Cost.** Obvious code lets a reader guess correctly, and quickly, what it does and what a change requires. Code that fails that test costs cognitive load, and a wrong guess is an unknown-unknown bug.
 
 **Refactor.** Make the obvious reading the correct one: better names and types, a short comment stating the non-obvious why, a dense expression unpacked into named steps, a hidden dependency passed explicitly. Prefer clearer code over explained code.
 

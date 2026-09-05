@@ -1,6 +1,6 @@
 # Architecture review examples
 
-These show the voice and the reshape move: name the flag, then show the alternative interface and why it is simpler. Each example is small so the shape is visible. On a real subsystem the same moves apply across modules. Match this register: blunt, specific, every finding tied to a complexity cost, and always show the interface the fix produces.
+These show how a finding should read: name the flag, then show the alternative interface and why it is simpler. Each example is small so the shape is visible. On a real subsystem the same moves apply across modules. Match this register: blunt, specific, every finding tied to a complexity cost, and always show the interface the fix produces.
 
 ## Example 1: shallow module and complexity exported to callers
 
@@ -104,7 +104,7 @@ The decision needs exactly one owner. Put the format behind an `Event` type that
 **After:**
 
 ```python
-# event.py  — the one place that knows the wire format
+# event.py: the one place that knows the wire format
 @dataclass(frozen=True)
 class Event:
     ts: str
@@ -154,7 +154,7 @@ This API has defined three exceptions into existence, and every caller pays for 
 
 Step back and ask what the caller wants: the discount, which is zero when no valid code applies. None of these three conditions is a failure. A missing code, an unknown code, and a below-minimum cart are all "the discount is zero". Redefine the contract to make that the normal, total result, and the special cases vanish.
 
-This works because all three conditions are legitimately normal outcomes. Real failures stay wrapped in nothing. If `lookup_promo` could raise on a database outage, that is a genuine fault and must still propagate. Defining errors out of existence eliminates manufactured special cases by design. It never silences real ones.
+This works because all three conditions are legitimately normal outcomes. If `lookup_promo` could raise on a database outage, that is a genuine fault and must still propagate. Defining errors out of existence eliminates manufactured special cases by design. It never silences real ones.
 
 **After:**
 

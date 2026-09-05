@@ -1,13 +1,13 @@
 ---
 name: review-architecture
-description: A deep, periodic design review of a codebase, subsystem, file, or diff in the style of Ousterhout's A Philosophy of Software Design, judged by the complexity it adds. Consult when asked for a design, architecture, or complexity review, an Ousterhout or APoSD review, help making code easier to understand and change, or advice on the shape of a refactor, even when the book is never named. Linting, formatting, and style conformance are out of scope.
+description: Perform a deep, opinionated code review in the style of John Ousterhout's A Philosophy of Software Design, optimising above all for reduced complexity. Use this whenever the user asks for a design review, an architecture or complexity review, an Ousterhout-style or APoSD review, help making code easier to understand and modify, an assessment of module, interface, or abstraction quality, or advice on the shape of a refactor, even if they never name the book. Trigger on requests to review a codebase, subsystem, file, diff, or PR for design quality, deep versus shallow modules, information hiding or leakage, or unnecessary complexity. Not for linting, formatting, or style-guide conformance.
 ---
 
 # Review: architecture
 
-Review the code as Ousterhout would: a senior designer pairing with the author, measuring one thing, complexity. Question the shape of the code. When the fix is to move a responsibility, merge two shallow classes, delete a layer, or redesign an interface, say so and show the better interface. Be blunt in service of the code, and separate "this is wrong" from "I would have done it differently". A review that lists forty nits has failed, and so has one that rubber-stamps working code with the wrong structure. Find the few things that matter and make the case for each.
+Review the code as Ousterhout would: a senior designer pairing with the author, measuring one thing, complexity. Question the shape of the code. When the fix is to move a responsibility, merge two shallow classes, delete a layer, or redesign an interface, say so and show the better interface. Report a structural problem as structural, even when a local nit is easier to act on. Be blunt in service of the code, and separate "this is wrong" from "I would have done it differently". A review that lists forty nits has failed, and so has one that rubber-stamps working code with the wrong structure. Find the few things that matter and make the case for each.
 
-This is a periodic audit of a whole subsystem, run once or twice in a project's life. Map the real modules and how they depend on each other before judging anything. A pass that samples a few files and lists surface nits fails the assignment. Respect the constraints you can see: hot paths, public API stability, compatibility, deadlines the author has flagged.
+This is a periodic audit of a whole subsystem, run once or twice in a project's life. Map the real modules and how they depend on each other before judging anything. A pass that samples a few files and lists surface nits fails the assignment. Some complexity is essential. Respect the constraints you can see: hot paths, public API stability, compatibility, deadlines the author has flagged.
 
 ## What is measured
 
@@ -17,7 +17,7 @@ Complexity is anything in the structure that makes the system hard to understand
 - **Cognitive load.** How much a developer must hold in their head to change it safely.
 - **Unknown unknowns.** It is unclear what must change or what must be known. The worst kind, because the landmine stays hidden until a bug appears.
 
-Its causes are dependencies and obscurity. A finding that names no symptom is taste: cut it, or label it as taste.
+Complexity has two causes. Dependencies: one piece of code cannot be understood or changed on its own. Obscurity: something important is not visible in the code. Every finding names its symptom and its cause. A finding that cannot name them is a matter of taste. Cut it, or say it is taste.
 
 ## How to read
 
@@ -38,14 +38,14 @@ Its causes are dependencies and obscurity. A finding that names no symptom is ta
 7. Comments that carry what the code cannot say.
 8. Names and consistency, only when a name misleads or variance creates a false expectation.
 
-`references/playbook.md` is the detection catalogue: for each red flag, how it looks, the principle, the refactor, and the overcorrection to avoid. `references/examples.md` shows the voice and the reshape move. Load them as needed.
+`references/playbook.md` is the detection catalogue: for each red flag, how it looks, the principle, the refactor, and the overcorrection to avoid. `references/examples.md` shows how a finding should read, ending with the alternative interface. Load them as needed.
 
 ## Output
 
 1. **Verdict**, one paragraph: easy or hard to understand and change, and why, in terms of the symptoms.
 2. **The structural issues that matter**, usually two to five. Each gives the red flag, the symptom, where it is, and the refactor with the resulting interface shown. The top one is designed twice: sketch the alternative and put the two interfaces side by side. Above five, say so and group the rest.
 3. **Lesser findings**, ranked, each tied to a cost. Taste is labelled as taste. Stop while the list is still worth reading.
-4. **What is already good**, briefly: the deep modules and clean abstractions worth protecting.
+4. **What is already good**, briefly and only where it is true: the deep modules and clean abstractions worth protecting.
 5. **The single highest-leverage next step.**
 
 Rank by the cost of being wrong. Push hardest on a load-bearing abstraction and ease off on a one-off script.
