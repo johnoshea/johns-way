@@ -83,6 +83,8 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **review-architecture.** User-invoked. A deep, periodic design review in the style of Ousterhout's A Philosophy of Software Design, judged by the complexity it adds. Maps the modules and their dependencies before judging anything, weighs deep versus shallow modules and information leakage above all, designs the top finding twice, and reports a verdict, the structural issues that matter, lesser findings, what is good, and one next step. Its detection catalogue and worked examples live under `references/`. Runs in the main context: a session opened for the review is already fresh.
 
+**review-security.** User-invoked. A deep, periodic security review with fresh eyes, following Kohnfelder's Designing Secure Software and the Saltzer and Schroeder principles, with the 2025 CWE Top 25 and the OWASP Top 10:2025 as its catalogue. Lists assets, attack surface, and trust boundaries before judging any line, works inward from the most exposed surface to the most valuable asset, and reports weaknesses marked Must, Ought, or Should, ranked by what an attacker gains and how reachable it is. Same layout and context as review-architecture.
+
 **pull-requests.** Creating pull requests. Description: what and why in a few sentences, alternatives rejected, how to verify. Links the issue. Proposes a split above roughly 400 changed lines.
 
 **issues.** Filing, reading, and updating GitHub issues. An issue is the input to requirements when one exists. Issues hold deferred work: found while working, out of scope, or blocked. The spec's task list holds work being done now. Work is in one place or the other, never both. Feature issues carry acceptance criteria written as a test list.
