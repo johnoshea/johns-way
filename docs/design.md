@@ -109,7 +109,7 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **Cooldown check.** Reads the staged `uv.lock`. Every registry package whose name and version pair is new is checked against the upload time uv records for its files, with no network. A package without one is looked up on PyPI. For each `uses:` line added under `.github/workflows/`, the date of the commit the ref points at is fetched through `gh api`. Blocks if any is under 14 days old. A version whose date cannot be found blocks too.
 
-**Repo pre-commit hook.** `johns-way-install-pre-commit`, on the Bash PATH while the plugin is enabled, installs the same check script as the git pre-commit hook of the current repo, so manual commits get the same protection. Both hooks call one script. The install-pre-commit skill runs it.
+**Repo pre-commit hook.** `johns-way-install-pre-commit`, on the Bash PATH while the plugin is enabled, installs the same check script as the git pre-commit hook of the current repo, so manual commits get the same protection. Both hooks call one script. The installed hook finds the current copy of the plugin at commit time: the development link in the skills directory, else the newest version in the plugin cache, else the copy it was installed from. A cached version is removed some time after an update, so its path is never fixed into the hook. The install-pre-commit skill runs it.
 
 **enforce-uv.** PreToolUse on Bash. Blocks direct python, python3, and pip invocations in favour of uv.
 

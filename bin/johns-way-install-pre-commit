@@ -2,6 +2,11 @@
 # Installs the johns-way check as the git pre-commit hook of the current
 # repository, so commits made outside Claude Code pass the same check.
 # Refuses to overwrite a pre-commit hook that is not ours.
+#
+# The installed hook finds the current copy of the plugin at commit time:
+# the development link in the skills directory, else the newest version in
+# the plugin cache, else the copy this installer ran from. A cached version
+# is removed some time after an update, so its path cannot be fixed in.
 set -euo pipefail
 
 hook=$(git rev-parse --git-path hooks/pre-commit)
@@ -15,8 +20,15 @@ fi
 mkdir -p "$(dirname "$hook")"
 cat > "$hook" <<EOF
 #!/usr/bin/env bash
-# Installed by johns-way. Runs the same check as the Claude Code commit hook.
-exec "$check" "\$(git rev-parse --show-toplevel)"
+# Installed by johns-way. Runs the same check as the Claude Code commit hook,
+# from the current copy of the plugin: the development link, else the newest
+# installed version, else the copy this hook was installed from.
+newest=\$(ls -d "\$HOME"/.claude/plugins/cache/*/johns-way/*/ 2>/dev/null | sort -V | tail -n 1)
+for check in "\$HOME/.claude/skills/johns-way/hooks/check.sh" "\${newest:+\${newest}hooks/check.sh}" "$check"; do
+    [ -n "\$check" ] && [ -x "\$check" ] && exec "\$check" "\$(git rev-parse --show-toplevel)"
+done
+echo "johns-way is not installed, so its pre-commit check cannot run. Install the plugin, or remove \$0." >&2
+exit 1
 EOF
 chmod +x "$hook"
 echo "Installed $hook"
