@@ -25,7 +25,7 @@ test_commands_other_than_git_commit_pass_without_running_the_check() {
 test_git_commit_runs_the_check_and_blocks_on_failure() {
     make_repo
     failing_justfile
-    output=$(hook 'git commit -m "x"'); code=$?
+    code=0; output=$(hook 'git commit -m "x"') || code=$?
     assert_eq 2 "$code"
     assert_contains "$output" "tests broke"
 }
@@ -40,7 +40,7 @@ test_git_commit_with_dash_c_checks_that_repository() {
     make_repo
     printf 'check:\n    true\n' > justfile
     mkdir other && (cd other && make_repo && failing_justfile)
-    output=$(hook "git -C $PWD/other commit -m x"); code=$?
+    code=0; output=$(hook "git -C $PWD/other commit -m x") || code=$?
     assert_eq 2 "$code"
     assert_contains "$output" "tests broke"
 }
@@ -56,7 +56,7 @@ test_runs_the_check_from_a_subdirectory() {
     make_repo
     failing_justfile
     mkdir sub && cd sub || return 1
-    output=$(hook 'git commit -m "x"'); code=$?
+    code=0; output=$(hook 'git commit -m "x"') || code=$?
     assert_eq 2 "$code"
     assert_contains "$output" "tests broke"
 }
@@ -73,10 +73,10 @@ test_skips_for_our_pre_commit_hook_from_a_subdirectory() {
 test_no_verify_is_blocked_outright() {
     make_repo
     printf 'check:\n    true\n' > justfile
-    output=$(hook 'git commit --no-verify -m "x"'); code=$?
+    code=0; output=$(hook 'git commit --no-verify -m "x"') || code=$?
     assert_eq 2 "$code"
     assert_contains "$output" "never skipped"
-    output=$(hook 'git commit -n -m "x"'); code=$?
+    code=0; output=$(hook 'git commit -n -m "x"') || code=$?
     assert_eq 2 "$code"
 }
 
@@ -93,6 +93,6 @@ test_does_not_skip_for_another_pre_commit_hook() {
     failing_justfile
     printf '#!/usr/bin/env bash\ntrue\n' > .git/hooks/pre-commit
     chmod +x .git/hooks/pre-commit
-    output=$(hook 'git commit -m "x"'); code=$?
+    code=0; output=$(hook 'git commit -m "x"') || code=$?
     assert_eq 2 "$code"
 }

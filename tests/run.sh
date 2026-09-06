@@ -20,7 +20,10 @@ for file in "$root"/tests/*_test.sh; do
         tmp=$(mktemp -d)
         export CLAUDE_PLUGIN_DATA="$tmp/plugin-data"
         # errexit inside the subshell makes the first failing assertion end the test.
-        if (cd "$tmp" || exit 1; set -e; "$fn"); then
+        # Bash ignores errexit inside an if condition, so the subshell runs on its own line.
+        (cd "$tmp" || exit 1; set -e; "$fn")
+        status=$?
+        if [ "$status" -eq 0 ]; then
             echo "ok   $fn"
         else
             echo "FAIL $fn"

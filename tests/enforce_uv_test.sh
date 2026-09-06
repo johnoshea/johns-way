@@ -10,17 +10,17 @@ hook() {
 }
 
 test_direct_python_is_blocked() {
-    output=$(hook "python3 -c 'print(1)'"); code=$?
+    code=0; output=$(hook "python3 -c 'print(1)'") || code=$?
     assert_eq 2 "$code"
     assert_contains "$output" "uv run python"
-    output=$(hook "cd x && python script.py"); code=$?
+    code=0; output=$(hook "cd x && python script.py") || code=$?
     assert_eq 2 "$code"
 }
 
 test_pip_is_blocked() {
-    output=$(hook "pip install requests"); code=$?
+    code=0; output=$(hook "pip install requests") || code=$?
     assert_eq 2 "$code"
-    output=$(hook "uv pip install requests"); code=$?
+    code=0; output=$(hook "uv pip install requests") || code=$?
     assert_eq 2 "$code"
 }
 
