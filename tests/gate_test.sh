@@ -22,12 +22,15 @@ pre_tool() {
         | "$root/hooks/gate.sh" >/dev/null; } 2>&1
 }
 
-# Runs the PostToolUse event for a Bash command $1 whose response was $2.
+# Runs the PostToolUse event for a Bash command $1 whose response object was $2.
 post_bash() {
-    jq -n --arg cmd "$1" --arg resp "$2" \
+    jq -n --arg cmd "$1" --argjson resp "$2" \
         '{hook_event_name: "PostToolUse", session_id: "s1", tool_name: "Bash", tool_input: {command: $cmd}, tool_response: $resp}' \
         | "$root/hooks/gate.sh"
 }
+
+# The response Claude Code gives a Bash call that runs in the background.
+background_response='{"stdout": "", "stderr": "", "interrupted": false, "isImage": false, "noOutputExpected": false, "backgroundTaskId": "bwm1"}'
 
 # Runs the UserPromptSubmit event with prompt $1. Prints the added context.
 prompt() {
@@ -68,7 +71,7 @@ test_stop_reads_the_transcript_when_no_message_is_supplied() {
 
 test_tool_calls_are_blocked_while_the_gate_is_open() {
     open_gate
-    output=$(pre_tool Bash '{"command": "cat out.txt"}'); code=$?
+    code=0; output=$(pre_tool Bash '{"command": "cat out.txt"}') || code=$?
     assert_eq 2 "$code"
     assert_contains "$output" "gate is open"
 }
@@ -94,7 +97,7 @@ test_a_task_notice_keeps_the_gate_and_tells_the_model_to_hold() {
     output=$(prompt "$(task_notice abc)")
     assert_contains "$output" "gate is open"
     [ -f "$(gate_file)" ]
-    output=$(pre_tool Bash '{"command": "cat out.txt"}'); code=$?
+    code=0; output=$(pre_tool Bash '{"command": "cat out.txt"}') || code=$?
     assert_eq 2 "$code"
 }
 
@@ -103,14 +106,16 @@ test_a_task_notice_without_a_gate_passes() {
 }
 
 test_a_background_crit_run_holds_until_that_run_finishes() {
-    post_bash "crit --range a..b" "Command running in background with ID: bwm1. Output is being written to: $PWD/bwm1.output. You will be notified when it completes."
-    [ -f "$(gate_file)" ]
-    pre_tool Bash "{\"command\": \"sleep 2; head -3 $PWD/bwm1.output\"}"
-    pre_tool Read "{\"file_path\": \"$PWD/bwm1.output\"}"
+    post_bash "crit --range a..b" "$background_response"
+    assert_eq "crit bwm1" "$(cat "$(gate_file)")"
+    pre_tool Bash '{"command": "sleep 2; head -3 /tmp/session/tasks/bwm1.output"}'
+    pre_tool Read '{"file_path": "/tmp/session/tasks/bwm1.output"}'
     pre_tool TaskOutput '{"task_id": "bwm1"}'
-    output=$(pre_tool Bash '{"command": "uv run pytest"}'); code=$?
+    code=0; output=$(pre_tool Bash '{"command": "uv run pytest"}') || code=$?
     assert_eq 2 "$code"
-    assert_contains "$output" "crit"
+    assert_contains "$output" "bwm1"
+    code=0; pre_tool Read '{"file_path": "/tmp/session/tasks/other.output"}' >/dev/null || code=$?
+    assert_eq 2 "$code"
     output=$(prompt "$(task_notice other)")
     assert_contains "$output" "crit"
     [ -f "$(gate_file)" ]
@@ -118,8 +123,14 @@ test_a_background_crit_run_holds_until_that_run_finishes() {
     [ ! -f "$(gate_file)" ]
 }
 
+test_printing_the_crit_command_keeps_a_crit_record() {
+    post_bash "crit --range a..b" "$background_response"
+    open_gate
+    assert_eq "crit bwm1" "$(cat "$(gate_file)")"
+}
+
 test_a_foreground_crit_command_opens_no_gate() {
-    post_bash "crit comments --json" '[{"id": "c_1"}]'
+    post_bash "crit comments --json" '{"stdout": "[]", "stderr": "", "interrupted": false}'
     [ ! -f "$(gate_file)" ]
 }
 

@@ -8,8 +8,8 @@
 # in one line and print the command again.
 #
 # One script serves four events. The state lives in one file per session
-# under the plugin data directory, holding either "gate" or
-# "crit <task id> <output file>" for a background crit run in progress.
+# under the plugin data directory, holding either "gate" or "crit <task id>"
+# for a background crit run in progress.
 set -uo pipefail
 
 input=$(cat)
@@ -47,6 +47,10 @@ last_message() {
 
 case $event in
 Stop)
+    # A crit round in progress keeps its record, so that its own notice still closes the gate.
+    if [ -f "$gate" ] && grep -q '^crit ' "$gate"; then
+        exit 0
+    fi
     if last_message | grep -Eq '^[[:space:]]*crit([[:space:]]+[^[:space:]]+)?[[:space:]]*$'; then
         open_gate gate
     fi
@@ -55,13 +59,13 @@ PreToolUse)
     [ -f "$gate" ] || exit 0
     tool=$(field .tool_name)
     [ "$tool" = AskUserQuestion ] && exit 0
-    read -r kind task output < "$gate"
+    read -r kind task < "$gate"
     if [ "$kind" = crit ]; then
         [ "$tool" = TaskOutput ] && exit 0
         case "$(field .tool_input.command) $(field .tool_input.file_path)" in
-        *"$output"*) exit 0 ;;
+        *"/$task.output"*) exit 0 ;;
         esac
-        echo "Blocked by the gate hook: a crit round is open. Wait for the crit task ($task) to finish. Only its output file, $output, may be read." >&2
+        echo "Blocked by the gate hook: a crit round is open. Wait for the crit task ($task) to finish. Only its output file, $task.output, may be read." >&2
         exit 2
     fi
     echo "Blocked by the gate hook: a gate is open and the user has not replied. Reply in one line and print the gate command again. Tool calls resume after the user's next message." >&2
@@ -70,11 +74,10 @@ PreToolUse)
 PostToolUse)
     [ "$(field .tool_name)" = Bash ] || exit 0
     field .tool_input.command | grep -Eq '^[[:space:]]*crit([[:space:]]|$)' || exit 0
-    response=$(printf '%s' "$input" | jq -r '.tool_response | tostring')
-    task=$(printf '%s' "$response" | sed -nE 's/.*running in background with ID: ([^ .]+)\..*/\1/p' | head -n 1)
-    output=$(printf '%s' "$response" | sed -nE 's/.*Output is being written to: ([^ ]+)\.( |$).*/\1/p' | head -n 1)
-    [ -n "$task" ] && [ -n "$output" ] || exit 0
-    open_gate "crit $task $output"
+    # A command that runs in the background answers with its task id in place of output.
+    task=$(printf '%s' "$input" | jq -r '.tool_response.backgroundTaskId? // ""')
+    [ -n "$task" ] || exit 0
+    open_gate "crit $task"
     ;;
 UserPromptSubmit)
     prompt=$(field .prompt)
