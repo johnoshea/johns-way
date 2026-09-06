@@ -33,7 +33,7 @@ Revise per the user's rulings. A spec with unresolved challenges is not done.
 
 ## Gate
 
-Commit the spec. Print this and stop:
+Commit the spec. Send a PushNotification, when the host has that tool, saying the spec waits at crit. Print this and stop:
 
     crit docs/specs/<file>.md
 

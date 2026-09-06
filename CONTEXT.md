@@ -36,7 +36,7 @@ _Avoid_: quarantine, embargo, waiting period.
 **Session check-in**: the one message per session, after a time limit, that asks whether medium work should upgrade to full.
 _Avoid_: reminder, timer, nudge.
 
-**Gate**: a point where work stops and waits for the user: the crit round on a spec, the crit round after a review, and any question asked with AskUserQuestion.
+**Gate**: a point where work stops and waits for the user: the crit round on a spec, the crit round on the review findings, and any question asked with AskUserQuestion. The gate hook blocks tool calls while a gate is open.
 _Avoid_: checkpoint, approval, sign-off.
 
 **Definition of done**: running the check target, pasting its real output, and having README.md, CLAUDE.md, and CONTEXT.md describe what the code now does.

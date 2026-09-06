@@ -72,11 +72,11 @@ Git is the progress record, and the spec is never edited to track it. At the sta
 | --- | --- |
 | routing | Every session, injected at start. Holds the paths and the definition of done |
 | requirements | Before designing medium or full work. Rounds of numbered questions, each with a recommended answer |
-| spec | Full work. Writes the spec, runs a pushback pass over it, then stops for the user's review |
+| spec | Full work. Writes the spec, runs a pushback pass over it, then notifies the user and stops for their review |
 | tdd | Every code change. The Canon TDD loop |
 | implementing | Working a task list. One commit per task, resuming across sessions, amending a spec that turns out wrong |
 | debugging | Any bug or failing test. The cause before the fix |
-| reviewing-own-work | After the last commit of medium or full work. Dispatches the reviewer agent, then stops for the user's comments |
+| reviewing-own-work | After the last commit of medium or full work. Dispatches the reviewer agent, writes its findings to a file for crit, notifies the user, and stops for their comments |
 | design-rules | Shaping an interface or judging a diff for complexity |
 | domain-language | Keeping the project's glossary in `CONTEXT.md` |
 | spike | Answering a feasibility question with throwaway code |
@@ -97,6 +97,7 @@ Git is the progress record, and the spec is never edited to track it. At the sta
 | check-in | PostToolUse | Once per session, after the minutes in `JOHNS_WAY_CHECKIN_MINUTES`, 60 by default, asks whether medium work should upgrade |
 | enforce-uv | PreToolUse on Bash | Blocks direct python and pip in favour of uv |
 | ask-dont-announce | Stop | Blocks a turn that announces a decision and invites an objection, and sends Claude back to ask |
+| gate | Stop, PreToolUse, PostToolUse, UserPromptSubmit | Holds the session at a crit gate: blocks tool calls until the user's next message, and holds when a background task finishes meanwhile |
 
 The check target is `just check` where the justfile has a check recipe, otherwise pytest and ruff through uv where there is a pyproject.toml. The cooldown reads the staged `uv.lock` and any `uses:` lines added to workflow files, and blocks a version released under 14 days ago.
 

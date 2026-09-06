@@ -69,7 +69,7 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **requirements.** Medium and full paths. Asks rounds of numbered questions, each with a recommended answer as a starting point. The user answers in whatever depth the decision needs. Asks everything askable now in one round. Asks only about decisions that are expensive to reverse; everything else gets a stated default. Facts are looked up, never asked, and lookups run as background subagents so no question waits on one. Opens with countable questions: kinds of user, external systems, things that persist, things that happen without a user asking. Stops when answers stop changing the design. After three rounds, lists the questions still open and waits. The user answers them, or says to draft with them left open.
 
-**spec.** Full path. Writes the spec in the format under [Spec format](#spec-format). Runs the pushback pass before presenting: contradictions between sections, ambiguity an implementer would have to guess at, scope that belongs in a separate change, feasibility against the actual code. Ends by printing `crit docs/specs/<file>.md` and stopping.
+**spec.** Full path. Writes the spec in the format under [Spec format](#spec-format). Runs the pushback pass before presenting: contradictions between sections, ambiguity an implementer would have to guess at, scope that belongs in a separate change, feasibility against the actual code. Ends by sending a push notification, printing `crit docs/specs/<file>.md`, and stopping.
 
 **tdd.** Every code change. The Canon TDD loop: write the test list, pick one test, watch it fail, write the minimum code, refactor as a separate step, repeat. Scaled to the change: a tiny fix gets one test. A bug fix starts with the failing test that reproduces it.
 
@@ -77,7 +77,7 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **debugging.** Any bug, failing test, error, or unexpected behaviour. Read the whole error. Reproduce it. Check what changed. Find the cheapest test that settles the question before adding instrumentation. One hypothesis at a time, stated before touching code. Failing test, then the fix. Three failed fixes means a design problem: stop and discuss. Done only when the cause can be stated in a sentence.
 
-**reviewing-own-work.** End of every medium and full task, before the done claim. Dispatches the plugin's reviewer agent, defined under `agents/`, once with fresh context. Inputs: the spec, or the chat design pasted in, and the diff since the first task commit. Two lenses: the code matches the spec, and the code passes the [Design rules](#design-rules). Reports findings, prints `crit`, and stops.
+**reviewing-own-work.** End of every medium and full task, before the done claim. Dispatches the plugin's reviewer agent, defined under `agents/`, once with fresh context. Inputs: the spec, or the chat design pasted in, and the diff since the first task commit. Two lenses: the code matches the spec, and the code passes the [Design rules](#design-rules). Writes the findings to a file outside the repository, sends a push notification, prints `crit <file>`, and stops.
 
 **reviewing-prs.** Other people's pull requests. Reads the linked issue and the description for intent. Reviews the diff for correctness first, then design. Posts comments with `gh`. Approves or requests changes only when asked to.
 
@@ -117,7 +117,9 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 Both were hooks in settings.json before the plugin existed and moved into it, with their settings.json entries removed in the same change so that only one copy fires. The process-downshift hook that also lived there was removed; the routing rules make it unnecessary. The sidekick hooks are unrelated and stay in settings.json.
 
-**No Stop hook.** A Stop hook could block the model from ending its turn while tracked files have uncommitted changes. It is left out. The commit check already guarantees every commit passes tests, and the model stops legitimately in that state when it asks about a spec amendment or after a failed fix.
+**gate.** One script on Stop, PreToolUse, PostToolUse, and UserPromptSubmit, with one state file per session under the plugin's data directory. Stop opens the gate when the last message prints the crit command on a line of its own. PreToolUse blocks every tool call except AskUserQuestion while the gate is open, telling the model to reply in one line and print the command again. UserPromptSubmit closes the gate on the user's next prompt. A background task that finishes arrives as a prompt too, so a task notice keeps the gate and adds context telling the model to hold. PostToolUse on a background `crit` run records the run's task id and output file; until that run's own notice arrives, only reads of that file pass. Startup, resume, and clear remove the file; compaction keeps it. Codex supplies the same four events and the same `prompt` field. The model's own knowledge of the gate is not enough: a task notice reads as a prompt, and the model works on it.
+
+**No Stop hook for uncommitted changes.** A Stop hook could block the model from ending its turn while tracked files have uncommitted changes. That one is left out. The commit check already guarantees every commit passes tests, and the model stops legitimately in that state when it asks about a spec amendment or after a failed fix.
 
 ## Spec format
 
@@ -188,7 +190,7 @@ These rules live in the design-rules skill. The spec's Approach section, the imp
 
 ## CLAUDE.md after migration
 
-Stays in CLAUDE.md: the opening four lines, Working together, Writing style, Human review gates, Toolchain. The gates change target: `crit docs/specs/<file>.md` after the spec, `crit` after review.
+Stays in CLAUDE.md: the opening four lines, Working together, Writing style, Human review gates, Toolchain. The gates change target: `crit docs/specs/<file>.md` after the spec, `crit <findings file>` after review.
 
 Moves out:
 

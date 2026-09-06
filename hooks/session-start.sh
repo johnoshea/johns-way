@@ -17,7 +17,7 @@ if [ -n "$session_id" ] && [ "$started_by" != compact ]; then
     sessions=${CLAUDE_PLUGIN_DATA:-${TMPDIR:-/tmp}/johns-way}/sessions
     mkdir -p "$sessions"
     date +%s > "$sessions/$session_id.start"
-    rm -f "$sessions/$session_id.notified"
+    rm -f "$sessions/$session_id.notified" "$sessions/$session_id.gate"
     find "$sessions" -type f -mtime +7 -delete
 fi
 
