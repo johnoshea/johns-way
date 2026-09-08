@@ -31,7 +31,7 @@ Documents: none. Review subagent: none.
 
 Criteria: the change touches an interface, a second module, or a persisted shape, and the flow being changed already exists in the repo.
 
-Process: one round of questions, usually. The design is one chat message: approach, files touched, tests. If the design involves a choice, ask it with AskUserQuestion and wait. With one obvious approach, implementation starts. TDD. Review. Definition of done.
+Process: one round of questions, usually. The design is one chat message: approach, any new interface in one line, files touched, tests. If the design involves a choice, ask it with AskUserQuestion and wait. With one obvious approach, implementation starts. TDD. Review. Definition of done.
 
 Documents: none. There is no limit on commits. After a configurable time on the session, the session check-in hook has the model ask whether to continue as medium or upgrade to full; see [Hooks](#hooks). If a medium task is interrupted before its last commit, the next session starts by writing the chat design into a spec file and continues on the full path. The SessionStart hook reports uncommitted changes, so an interrupted task is visible.
 
@@ -129,7 +129,7 @@ Sections, in order:
 
 1. **Problem.** One paragraph.
 2. **Non-goals.**
-3. **Approach.** Components and data, and which parts are core and which are shell. Core takes data and returns data. Shell performs effects. No code.
+3. **Approach.** Components and data, and which parts are core and which are shell. Core takes data and returns data. Shell performs effects. Each component's interface in one line: what a caller gives it and gets back. No code.
 4. **Alternatives considered.** Rejected options and why. This is the decision record.
 5. **Open questions.**
 6. **Tasks.** A numbered list. Each task is one commit and gives a one-line title and the tests it adds. A task line starts with its number and a period. The SessionStart hook counts only such lines under this heading.
@@ -178,7 +178,8 @@ During requirements and spec writing, terms the user uses are checked against it
 
 These rules live in the design-rules skill. The spec's Approach section, the implementing skill's refactor step, and the review's second lens all apply them.
 
-- Each abstraction earns its keep. A function shorter than the words needed to describe it is collapsed.
+- Each module is deep: a caller must know much less than the module hides. A function shorter than the words needed to describe it is collapsed.
+- Complexity goes down, not out. A simpler interface beats a simpler implementation.
 - A reviewer can follow the diff without reading the rest of the module, or the diff carries a comment saying why.
 - Remove a parameter, option, or branch. If nobody would notice, it goes.
 - A patch around a design problem is replaced by fixing the interface, or by an issue when that is out of scope.

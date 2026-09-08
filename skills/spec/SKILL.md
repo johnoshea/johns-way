@@ -11,7 +11,7 @@ One file at `docs/specs/YYYY-MM-DD-<topic>.md`, one page unless the approach nee
 
 1. **Problem.** One paragraph: who hits it, what triggers it, what they do today.
 2. **Non-goals.** What this change leaves alone.
-3. **Approach.** Components and data. Which parts are core, taking data and returning data, and which are shell, performing effects. Apply the design-rules skill.
+3. **Approach.** Components and data. Which parts are core, taking data and returning data, and which are shell, performing effects. For each component, one line saying what a caller gives it and gets back. That is its interface, judged for depth here, before any code exists. Apply the design-rules skill.
 4. **Alternatives considered.** Rejected options and why. This is the decision record; there are no ADRs.
 5. **Open questions.** Carried from requirements. An open question stays open until the user closes it.
 6. **Tasks.** A numbered list in build order. Each task is one commit and gives a one-line title and the tests it adds. A task line starts with its number and a period; the SessionStart hook counts those lines to report progress.

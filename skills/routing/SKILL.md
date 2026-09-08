@@ -13,7 +13,7 @@ Classify every request before starting work. If the user names a path, use it as
 
 **Small.** The change stays inside one module's internals, changes no interface another module calls, changes no persisted data shape, and fits in one commit. Ask only if the request is ambiguous. The tdd skill, the definition of done, commit. No documents, no review.
 
-**Medium.** The change touches an interface, a second module, or a persisted shape, and the flow being changed already exists in the repo. The requirements skill, one round if needed. Give the design in one chat message: approach, files touched, tests. If the design involves a choice, ask it with AskUserQuestion and wait. Otherwise start. The implementing skill, then reviewing-own-work, then the definition of done. No documents.
+**Medium.** The change touches an interface, a second module, or a persisted shape, and the flow being changed already exists in the repo. The requirements skill, one round if needed. Give the design in one chat message: approach, any new interface in one line, files touched, tests. If the design involves a choice, ask it with AskUserQuestion and wait. Otherwise start. The implementing skill, then reviewing-own-work, then the definition of done. No documents.
 
 **Full.** A new flow, subsystem, or project, or a decision that is expensive to reverse: persistence, concurrency, an external system, authentication, deployment target. The requirements skill, then the spec skill with its crit gate, then the implementing skill one commit per task, then reviewing-own-work, then the definition of done.
 
