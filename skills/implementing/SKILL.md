@@ -16,8 +16,6 @@ Each task's commit carries two trailers, which the SessionStart hook reads to co
     Spec: docs/specs/<file>.md
     Task: <number>
 
-Commit subject: imperative, under 72 characters, saying what changed. Body only when the diff does not explain itself, giving the why. No test evidence in the message.
-
 ## Medium path: the chat design
 
 Commit each coherent piece as soon as it is green, with no trailers. When the session check-in arrives, stop and ask with AskUserQuestion whether to continue as medium or upgrade to full. If a medium task is interrupted before its last commit, the next session writes the chat design into a spec and continues on the full path.
