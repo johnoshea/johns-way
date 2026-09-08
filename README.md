@@ -136,6 +136,7 @@ agents/reviewer.md                the review subagent
 bin/                              executables on the Bash PATH while the plugin is enabled
 tests/                            test runner, helpers, and tests
 docs/design.md                    the design
+docs/2026-09-07-ousterhout-review.md  where the plugin holds three ideas from A Philosophy of Software Design
 CONTEXT.md                        the glossary
 ```
 
