@@ -7,7 +7,7 @@ description: The Canon TDD loop for every code change, whether feature, bug fix,
 
 Every code change follows this loop:
 
-1. Write the test list: the concrete behaviours this change must have. A spec's task names its tests. A bug gives one test that reproduces it.
+1. Write the test list: the concrete behaviours this change must have. A spec's task names its tests. A bug gives one test that reproduces it. An item that expects an error is a prompt: could the contract make that case normal? A real failure stays on the list.
 2. Pick one item. Write it as a runnable test.
 3. Run it and watch it fail. Show the failing output. A test that passes at once is testing nothing: fix the test.
 4. Write the least code that makes it pass, along with every earlier test.

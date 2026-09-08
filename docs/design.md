@@ -71,7 +71,7 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **spec.** Full path. Writes the spec in the format under [Spec format](#spec-format). Runs the pushback pass before presenting: contradictions between sections, ambiguity an implementer would have to guess at, scope that belongs in a separate change, feasibility against the actual code. Ends by sending a push notification, printing `crit docs/specs/<file>.md`, and stopping.
 
-**tdd.** Every code change. The Canon TDD loop: write the test list, pick one test, watch it fail, write the minimum code, refactor as a separate step, repeat. Scaled to the change: a tiny fix gets one test. A bug fix starts with the failing test that reproduces it.
+**tdd.** Every code change. The Canon TDD loop: write the test list, pick one test, watch it fail, write the minimum code, refactor as a separate step, repeat. A test that expects an error prompts the question whether the contract could make that case normal. Scaled to the change: a tiny fix gets one test. A bug fix starts with the failing test that reproduces it.
 
 **implementing.** Medium and full paths. Works the task list in order. One task is one commit, with the trailers under [Progress tracking](#progress-tracking). The refactor step asks the questions under [Design rules](#design-rules). Updates CONTEXT.md, README.md, and CLAUDE.md in the same commit as the code that changes them. On resume: read the status the SessionStart hook printed, confirm the next task in one line, continue. When implementation shows the spec is wrong: stop, state what is wrong and the proposed amendment, and ask with AskUserQuestion. On approval, add the entry to the spec's Amendments section, commit that change, and continue.
 
@@ -182,7 +182,7 @@ These rules live in the design-rules skill. The spec's Approach section, the imp
 - A reviewer can follow the diff without reading the rest of the module, or the diff carries a comment saying why.
 - Remove a parameter, option, or branch. If nobody would notice, it goes.
 - A patch around a design problem is replaced by fixing the interface, or by an issue when that is out of scope.
-- Before a try/except or null check, change the interface so the error cannot happen.
+- Before a try/except or null check, change the interface so the error cannot happen: make the case normal, return a total result, or handle it once low in the module. A real failure still surfaces.
 - One adapter is a hypothetical seam. Two adapters is a real one.
 - The deletion test: delete the module. If complexity vanishes, it was a pass-through.
 - Functional core, imperative shell: pure logic takes data and returns data. Effects live at the edges.

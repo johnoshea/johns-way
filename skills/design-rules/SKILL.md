@@ -11,7 +11,7 @@ Complexity is the enemy. Ask these while writing, not as a checklist afterwards.
 - **Could a reviewer follow this diff without reading the rest of the module?** If not, the diff is doing too much, or it needs a comment saying why.
 - **If you removed this parameter, option, or branch, who would notice?** If nobody, remove it.
 - **Are you patching around a design problem?** Fix the interface. When that is out of scope, file an issue and say so.
-- **Before a try/except or a null check: can the interface change so the error cannot happen?**
+- **Before a try/except or a null check: can the interface change so the error cannot happen?** Make the case normal, return a total result, or handle it once low in the module. A real failure still surfaces.
 - **One adapter is a hypothetical seam. Two adapters is a real one.** Add an interface only when a second implementation exists.
 - **The deletion test.** Imagine deleting the module. If complexity vanishes, it was a pass-through. If complexity reappears across its callers, it was earning its keep.
 - **Functional core, imperative shell.** Pure logic takes data and returns data. Effects live at the edges. Test the core directly and the shell thinly.
