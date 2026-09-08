@@ -1,6 +1,6 @@
 {
   "name": "johns-way",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Routing by size, Canon TDD, specs, review, and git-tracked progress, with workflow hooks.",
   "author": {"name": "John O'Shea"},
   "repository": "https://github.com/johnoshea/johns-way",

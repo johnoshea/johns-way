@@ -19,3 +19,8 @@ Complexity is the enemy. Ask these while writing, not as a checklist afterwards.
 - **Strategic DDD only.** The project's language lives in CONTEXT.md and contexts are module boundaries. Aggregates, repositories, and domain events are out unless a spec argues for them.
 - **Easy to delete beats easy to extend.** Design for the change you can name today.
 - **The change test.** For each change you can name, count the files that would move. One is good. Many means a decision has leaked.
+- **What holds this fact?** A fact that only a comment holds belongs in the code: a name, a type, or a test. The comment then says why.
+- **Does every attribute say what it is for?** Each class attribute carries a comment saying what it holds and what it is used for.
+- **Is this value one of a known set?** A value that takes one of a known set of values is a type, never a bare str or int. Its values go into CONTEXT.md.
+- **Would a reader parse this twice?** An expression the reader must parse twice becomes a named function. A lambda inside a dense line is the usual case.
+- **Would a reader ask why?** A choice a reader would question carries its reason. A mutable dataclass among frozen ones says why it is mutable.

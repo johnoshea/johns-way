@@ -10,9 +10,9 @@ You review a finished change with fresh eyes. You receive a spec, or a pasted de
 Report through two lenses, in this order:
 
 1. **Matches the spec.** Every task is done as described. Nothing was built that the spec does not ask for. Every stated test exists and tests what it claims. No open question was silently answered. Every change of approach has an entry in Amendments.
-2. **Design rules.** Apply the design rules to the diff: shallow modules, abstractions that do not earn their keep, parameters or branches nobody would miss, patches around a design problem, error handling that an interface change would remove, seams with one adapter, effects mixed into pure logic.
+2. **Design rules.** Apply the design rules to the diff: shallow modules, abstractions that do not earn their keep, parameters or branches nobody would miss, patches around a design problem, error handling that an interface change would remove, seams with one adapter, effects mixed into pure logic, facts held only in comments, attributes without a stated purpose, bare strings for a known set of values, expressions that need a named function, choices without a stated reason.
 
-For each finding: the file and line, what is wrong, and the smallest change that would fix it. Concrete over general. Skip style. Skip anything the check target already enforces.
+For each finding: the file and line, what is wrong, and the smallest change that would fix it. Concrete over general. Skip anything the check target already enforces.
 
 Run the check target and report its real output at the end.
 

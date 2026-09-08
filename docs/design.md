@@ -188,6 +188,11 @@ These rules live in the design-rules skill. The spec's Approach section, the imp
 - The deletion test: delete the module. If complexity vanishes, it was a pass-through.
 - Functional core, imperative shell: pure logic takes data and returns data. Effects live at the edges.
 - Strategic DDD only. The ubiquitous language lives in CONTEXT.md and contexts are module boundaries. Aggregates, repositories, and domain events are out unless a spec argues for them.
+- A fact that only a comment holds moves into the code: a name, a type, or a test.
+- Every class attribute carries a comment saying what it holds and what it is used for.
+- A value that takes one of a known set is a type, never a bare str or int, and its values go into CONTEXT.md.
+- An expression the reader must parse twice becomes a named function.
+- A choice a reader would question carries its reason.
 
 ## CLAUDE.md after migration
 
