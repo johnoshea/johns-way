@@ -72,7 +72,7 @@ Git is the progress record, and the spec is never edited to track it. At the sta
 | --- | --- |
 | routing | Every session, injected at start. Holds the paths and the definition of done |
 | requirements | Before designing medium or full work. Rounds of numbered questions, each with a recommended answer |
-| spec | Full work. Writes the spec, runs a pushback pass over it, then notifies the user and stops for their review |
+| spec | Full work. Designs the approach twice, writes the spec, runs a pushback pass over it, then notifies the user and stops for their review |
 | tdd | Every code change. The Canon TDD loop |
 | implementing | Working a task list. One commit per task, resuming across sessions, amending a spec that turns out wrong |
 | debugging | Any bug or failing test. The cause before the fix |

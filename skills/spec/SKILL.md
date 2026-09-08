@@ -19,6 +19,10 @@ One file at `docs/specs/YYYY-MM-DD-<topic>.md`, one page unless the approach nee
 
 Use the terms in CONTEXT.md. A new term the spec needs goes into CONTEXT.md in the same commit; see the domain-language skill.
 
+## Two designs
+
+Before writing Approach, sketch two approaches that differ in where the interfaces fall. Compare them on the design rules: which has the deeper modules, which needs fewer special cases, which is easier to delete. Write the winner as Approach and the loser into Alternatives considered with the reason. When the design rules do not settle it, the choice is the user's: ask with AskUserQuestion and wait.
+
 ## Pushback
 
 Before presenting the draft, read it as an adversary and list numbered challenges for the user to accept or reject:

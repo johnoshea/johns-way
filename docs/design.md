@@ -39,7 +39,7 @@ Documents: none. There is no limit on commits. After a configurable time on the 
 
 Criteria: a new flow, subsystem, or project. Or any decision that is expensive to reverse: persistence, concurrency, an external system, authentication, deployment target.
 
-Process: requirements rounds. A spec file with an ordered task list. A pushback pass. The `crit` gate on the spec. Implementation task by task, one commit each. Review. Definition of done.
+Process: requirements rounds. Two approaches compared on the design rules, the loser recorded under Alternatives considered. A spec file with an ordered task list. A pushback pass. The `crit` gate on the spec. Implementation task by task, one commit each. Review. Definition of done.
 
 Documents: one spec file.
 
@@ -67,9 +67,9 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **routing.** Always loaded, injected by the SessionStart hook. Holds the path criteria, the downgrade and upgrade rules, the response to the session check-in, the subagent policy, and the definition of done. Definition of done: run the project's check target, paste the real output, and treat "should work" as unfinished. Under 40 lines.
 
-**requirements.** Medium and full paths. Asks rounds of numbered questions, each with a recommended answer as a starting point. The user answers in whatever depth the decision needs. Asks everything askable now in one round. Asks only about decisions that are expensive to reverse; everything else gets a stated default. Facts are looked up, never asked, and lookups run as background subagents so no question waits on one. Opens with countable questions: kinds of user, external systems, things that persist, things that happen without a user asking. Stops when answers stop changing the design. After three rounds, lists the questions still open and waits. The user answers them, or says to draft with them left open.
+**requirements.** Medium and full paths. Asks rounds of numbered questions, each with a recommended answer as a starting point. The user answers in whatever depth the decision needs. Asks everything askable now in one round. Asks only about decisions that are expensive to reverse; everything else gets a stated default. Facts are looked up, never asked, and lookups run as background subagents so no question waits on one. Opens with countable questions: kinds of user, external systems, things that persist, things that happen without a user asking. A round that settles nothing gets two drafts for the user to compare instead. Stops when answers stop changing the design. After three rounds, lists the questions still open and waits. The user answers them, or says to draft with them left open.
 
-**spec.** Full path. Writes the spec in the format under [Spec format](#spec-format). Runs the pushback pass before presenting: contradictions between sections, ambiguity an implementer would have to guess at, scope that belongs in a separate change, feasibility against the actual code. Ends by sending a push notification, printing `crit docs/specs/<file>.md`, and stopping.
+**spec.** Full path. Sketches two approaches that differ in where the interfaces fall, compares them on the design rules, and writes the loser into Alternatives considered. Writes the spec in the format under [Spec format](#spec-format). Runs the pushback pass before presenting: contradictions between sections, ambiguity an implementer would have to guess at, scope that belongs in a separate change, feasibility against the actual code. Ends by sending a push notification, printing `crit docs/specs/<file>.md`, and stopping.
 
 **tdd.** Every code change. The Canon TDD loop: write the test list, pick one test, watch it fail, write the minimum code, refactor as a separate step, repeat. A test that expects an error prompts the question whether the contract could make that case normal. Scaled to the change: a tiny fix gets one test. A bug fix starts with the failing test that reproduces it.
 
@@ -130,7 +130,7 @@ Sections, in order:
 1. **Problem.** One paragraph.
 2. **Non-goals.**
 3. **Approach.** Components and data, and which parts are core and which are shell. Core takes data and returns data. Shell performs effects. Each component's interface in one line: what a caller gives it and gets back. No code.
-4. **Alternatives considered.** Rejected options and why. This is the decision record.
+4. **Alternatives considered.** Rejected options and why, always including the losing approach. This is the decision record.
 5. **Open questions.**
 6. **Tasks.** A numbered list. Each task is one commit and gives a one-line title and the tests it adds. A task line starts with its number and a period. The SessionStart hook counts only such lines under this heading.
 7. **Amendments.** Empty at first. Dated entries, each giving what changed and why.

@@ -27,7 +27,7 @@ Ask only about decisions that are expensive to reverse. Everything else gets a s
 
 When the shape is unclear, open with countable questions: how many kinds of user, how many external systems, how many things that persist, what happens without a user asking.
 
-A round that settles nothing is the signal to draft instead: put a one-paragraph description and a list of three to six modules in front of the user and ask what is wrong. People correct a wrong draft faster than they answer abstract questions.
+A round that settles nothing is the signal to draft instead: put two drafts in front of the user, each a one-paragraph description and a list of three to six modules, and ask which is closer and what is wrong with it. People correct a wrong draft faster than they answer abstract questions, and compare two faster than they judge one.
 
 Stop when answers stop changing the design. After three rounds, list the questions still open and wait. The user answers them, or says to draft with them left open.
 
