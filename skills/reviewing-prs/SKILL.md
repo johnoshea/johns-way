@@ -14,7 +14,7 @@ description: Reviewing other people's pull requests with gh. Consult when asked 
 `gh pr diff`, and check the branch out when the diff alone is not enough. Read in this order:
 
 1. **Correctness.** Does it do what the description says. Missing cases, broken invariants, wrong error handling, races. Run the tests.
-2. **Tests.** Do they test the behaviour or the implementation. Would they fail if the change were reverted.
+2. **Tests.** Would they fail if the change were reverted. Does each new test pass the deletion test under What a test proves in the tdd skill.
 3. **Design.** The design-rules skill applied to the diff, weighted towards what is expensive to change later: interfaces, persisted shapes, boundaries.
 4. **Everything else** goes unsaid unless asked. Style that a formatter or linter would catch is never a comment.
 

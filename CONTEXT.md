@@ -45,6 +45,12 @@ _Avoid_: done criteria, acceptance, DoD.
 **Reviewer**: the plugin's subagent that reviews a finished change with fresh context, against its spec and the design rules.
 _Avoid_: critic, auditor, second opinion.
 
+**Deletion test**: imagining a module or a test deleted and naming what is lost, complexity that reappears across callers or a defect that goes uncaught.
+_Avoid_: removal check, ablation.
+
+**Vacuous test**: a test that no plausible defect in the code under test would fail, or whose failure another test already gives.
+_Avoid_: trivial test, redundant test, weak test, useless test.
+
 **Local install**: the development checkout linked into Claude Code and copied into a generated Codex marketplace, refreshed with `just install`.
 _Avoid_: deployment, release.
 
