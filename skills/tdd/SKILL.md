@@ -30,7 +30,6 @@ A test earns its place when a plausible defect in the code under test would make
 
 Shapes that cannot fail:
 
-- No assertion. Another test on the same path already catches an exception there.
 - An assertion that holds by construction: a value compared with itself, an isinstance check on a value the test built, a check that a result is not None when the exact value is known.
 - An expected value computed by the same logic as the code. Write the literal.
 - An assertion that the fake's fixed return value satisfies, whatever the code in between does.
@@ -40,6 +39,7 @@ Shapes that cannot fail:
 
 Shapes that repeat another test:
 
+- No assertion, on a path another test already runs.
 - A second parameter row on the same branch. A row earns its place by reaching a boundary the others miss: empty, zero, negative, largest, unicode, another branch. Its id names that boundary. For many values, write a property test instead of rows.
 - The same assertion through an entry point that only delegates.
 - An assertion that is a subset of a sibling's.
