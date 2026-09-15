@@ -1,6 +1,6 @@
 # johns-way
 
-A Claude Code and Codex plugin that gives the agent one fixed way of working on a codebase. It sizes every request before starting, writes a test before the code, writes a one-page spec before large work, records progress in git, reviews finished work with fresh eyes, and sends every commit message to a reader with no session context before committing. Hooks enforce the mechanical rules: every commit passes the project's checks and reads in short sentences, no dependency under 14 days old gets in, Python runs through uv, and a decision that belongs to the user is asked rather than announced.
+A Claude Code and Codex plugin that gives the agent one fixed way of working on a codebase. It sizes every request before starting, writes a test before the code, writes a one-page spec before large work, records progress in git, reviews finished work with fresh eyes, and sends every commit message to a reader with no session context before committing. Hooks enforce the mechanical rules: every commit passes the project's checks, every commit message and every reply reads in short sentences, no dependency under 14 days old gets in, Python runs through uv, and a decision that belongs to the user is asked rather than announced.
 
 It is built for one person working alone and committing straight to main. It is opinionated. The [design](docs/design.md) says what it does and why.
 
@@ -26,7 +26,7 @@ Use a current Codex CLI with `codex plugin` support (tested with 0.153.4). Add t
 
 Start a new thread after installation. In the CLI, open `/hooks` and review and trust the plugin hooks; installation alone does not enable their execution. Start another new thread after trusting them so the SessionStart hook loads routing. In the app, ask to use johns-way or choose its skills from the composer. In the CLI, use the skill picker (`$`) to select a bundled skill.
 
-The same skills and hooks serve both hosts. Codex receives routing and progress through SessionStart, checks shell commands through PreToolUse, and reads the final message directly for the Stop check. Codex uses its own question tools and a fresh general subagent with the bundled reviewer instructions. It does not register the Claude named reviewer profile. If subagents are unavailable, the review needs a separate thread. The skills locate helper commands inside the plugin when `bin/` is not on PATH.
+The same skills and hooks serve both hosts. Codex receives routing and progress through SessionStart, checks shell commands through PreToolUse, and reads the final message directly for the Stop checks. Codex uses its own question tools and a fresh general subagent with the bundled reviewer instructions. It does not register the Claude named reviewer profile. If subagents are unavailable, the review needs a separate thread. The skills locate helper commands inside the plugin when `bin/` is not on PATH.
 
 Hook enforcement requires a Codex build and surface that supports plugin hooks, plus explicit hook trust. Skills remain usable without hooks, but routing must then be invoked explicitly and mechanical checks are not automatic. Use the same hook prerequisites listed above; `crit` must also be installed for the spec and review gates.
 
@@ -97,6 +97,7 @@ Git is the progress record, and the spec is never edited to track it. At the sta
 | check-in | PostToolUse | Once per session, after the minutes in `JOHNS_WAY_CHECKIN_MINUTES`, 60 by default, asks whether medium work should upgrade |
 | enforce-uv | PreToolUse on Bash | Blocks direct python and pip in favour of uv |
 | ask-dont-announce | Stop | Blocks a turn that announces a decision and invites an objection, and sends Claude back to ask |
+| plain-reply | Stop | Blocks a turn whose last message has a sentence over 25 words or a semicolon, and sends Claude back to rewrite them |
 | gate | Stop, PreToolUse, PostToolUse, UserPromptSubmit | Holds the session at a crit gate: blocks tool calls until the user's next message, and holds when a background task finishes meanwhile |
 
 The check target is `just check` where the justfile has a check recipe, otherwise pytest and ruff through uv where there is a pyproject.toml. The cooldown reads the staged `uv.lock` and any `uses:` lines added to workflow files, and blocks a version released under 14 days ago.

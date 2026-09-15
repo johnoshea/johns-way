@@ -45,7 +45,7 @@ _Avoid_: done criteria, acceptance, DoD.
 **Reviewer**: the plugin's subagent that reviews a finished change with fresh context, against its spec and the design rules.
 _Avoid_: critic, auditor, second opinion.
 
-**Cold reader**: a subagent given a commit message and its staged diff, with no session context, that reports what it cannot resolve from those alone.
+**Cold reader**: a subagent given a draft, a commit message with its staged diff or a reply, with no session context, that reports what it cannot resolve from that alone.
 _Avoid_: fresh reader, stranger, second pair of eyes.
 
 **Deletion test**: imagining a module or a test deleted and naming what is lost: complexity that reappears across its callers, or a defect that goes uncaught.

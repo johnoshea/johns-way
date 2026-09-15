@@ -44,17 +44,11 @@ message=$(
         | sed -E "s/^(-m|--message)[[:space:]=]+//; s/^[\"'](.*)[\"']\$/\1/" || true
 )
 
-# One idea per sentence: a semicolon joins two, and a sentence over 25 words
-# holds more than one. Wrapped lines are joined within a paragraph first.
-if printf '%s' "$message" | grep -q ';'; then
-    echo "Commit blocked: the message has a semicolon. Write two sentences." >&2
-    exit 2
-fi
-long=$(printf '%s\n' "$message" | awk 'BEGIN { RS = "" } { gsub(/\n/, " "); print }' \
-    | sed -E 's/([.!?])[[:space:]]+/\1\
-/g' | awk 'NF > 25')
+# One idea per sentence: long-sentences.sh prints any sentence over 25 words
+# or joined to another by a semicolon.
+long=$(printf '%s\n' "$message" | "$script_dir/long-sentences.sh")
 if [ -n "$long" ]; then
-    printf 'Commit blocked: a sentence in the message is over 25 words. One idea per sentence.\n%s\n' "$long" >&2
+    printf 'Commit blocked: a sentence in the message is over 25 words or has a semicolon. One idea per sentence.\n%s\n' "$long" >&2
     exit 2
 fi
 

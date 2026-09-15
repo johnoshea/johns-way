@@ -9,7 +9,7 @@ It keeps the parts of Superpowers that earn their time: Canon TDD, systematic de
 ## Principles
 
 - **The lightest path the evidence allows.** Classification uses countable facts. The default is the smaller class. The user can name the path up front or request a downgrade at any time, and neither waits for anything. Upgrading needs one of three named triggers and the user's confirmation.
-- **Implementation runs in the main context.** Subagents do three jobs: fact-finding during requirements, one review per feature, and one cold read of each commit message.
+- **Implementation runs in the main context.** Subagents do three jobs: fact-finding during requirements, one review per feature, and one cold read of each commit message and each explanation of how something works.
 - **One document per feature.** The spec holds the design and the ordered task list. There is no separate plan.
 - **Git is the progress record.** Each task is one commit carrying a trailer that names the spec and the task number. The spec is never edited to track progress.
 - **Hooks hold mechanical rules. Skills hold procedures. CLAUDE.md holds judgment rules that apply every turn.** A rule goes in the first of those three that can hold it.
@@ -65,7 +65,7 @@ When a trigger appears, state it and ask with AskUserQuestion whether to step up
 
 Each entry gives the trigger, what the skill does, and what it produces.
 
-**routing.** Always loaded, injected by the SessionStart hook. Holds the path criteria, the downgrade and upgrade rules, the response to the session check-in, the subagent policy, and the definition of done. Definition of done: run the project's check target, paste the real output, treat "should work" as unfinished, and write every commit message to one rule: an imperative subject saying what the change does to the files, and a body giving the why when the diff does not. Before the commit, the plainly skill sends the message and the staged diff to a cold reader and rewrites from what that reader cannot resolve. The author cannot make that judgment alone, because every phrase the session explains reads as clear to someone who was in the session. The rule sits here so that it reaches every path, including small work that loads no other skill. Under 40 lines.
+**routing.** Always loaded, injected by the SessionStart hook. Holds the path criteria, the downgrade and upgrade rules, the response to the session check-in, the subagent policy, and the definition of done. Definition of done: run the project's check target, paste the real output, treat "should work" as unfinished, and write every commit message to one rule: an imperative subject saying what the change does to the files, and a body giving the why when the diff does not. Before the commit, the plainly skill sends the message and the staged diff to a cold reader and rewrites from what that reader cannot resolve. The author cannot make that judgment alone, because every phrase the session explains reads as clear to someone who was in the session. A reply that explains how something works goes to a cold reader the same way, with the draft alone. The rule sits here so that it reaches every path, including small work that loads no other skill. Under 40 lines.
 
 **requirements.** Medium and full paths. Asks rounds of numbered questions, each with a recommended answer as a starting point. The user answers in whatever depth the decision needs. Asks everything askable now in one round. Asks only about decisions that are expensive to reverse; everything else gets a stated default. Facts are looked up, never asked, and lookups run as background subagents so no question waits on one. Opens with countable questions: kinds of user, external systems, things that persist, things that happen without a user asking. A round that settles nothing gets two drafts for the user to compare instead. Stops when answers stop changing the design. After three rounds, lists the questions still open and waits. The user answers them, or says to draft with them left open.
 
@@ -114,6 +114,8 @@ Each entry gives the trigger, what the skill does, and what it produces.
 **enforce-uv.** PreToolUse on Bash. Blocks direct python, python3, and pip invocations in favour of uv.
 
 **ask-dont-announce.** Stop. Blocks a turn whose last message announces a decision and invites an objection, and sends the model back to ask with AskUserQuestion.
+
+**plain-reply.** Stop. Blocks a turn whose last message has a sentence over 25 words or a semicolon, skipping code blocks, inline code, and table rows, and sends the model back to rewrite those sentences. The check lives in `long-sentences.sh`, and the commit check applies it to commit messages. Both Stop checks read the last message through `last-message.sh`. A written rule alone left replies and commit messages in packed sentences.
 
 Both were hooks in settings.json before the plugin existed and moved into it, with their settings.json entries removed in the same change so that only one copy fires. The process-downshift hook that also lived there was removed; the routing rules make it unnecessary. The sidekick hooks are unrelated and stay in settings.json.
 
@@ -240,7 +242,7 @@ For development, `just install` symlinks the repository into `~/.claude/skills/j
 
 ### Codex packaging
 
-The repository also exposes `.codex-plugin/plugin.json` and a Codex marketplace at `.agents/plugins/marketplace.json`, with the plugin source at the repository root. This keeps skills, helpers, and default `hooks/hooks.json` shared. Codex provides the compatibility plugin environment variables and canonical Bash hook input. The Stop hook prefers the supplied `last_assistant_message`; Claude transcripts remain the fallback when that field is absent.
+The repository also exposes `.codex-plugin/plugin.json` and a Codex marketplace at `.agents/plugins/marketplace.json`, with the plugin source at the repository root. This keeps skills, helpers, and default `hooks/hooks.json` shared. Codex provides the compatibility plugin environment variables and canonical Bash hook input. The Stop hooks prefer the supplied `last_assistant_message`, and Claude transcripts remain the fallback when that field is absent.
 
 `just install` installs both hosts; `just install-claude` and `just install-codex` select one. The Codex installer refreshes a generated snapshot under `.local/codex/plugins/johns-way`, adds a cache suffix to its version, registers `johns-way-local` through the CLI, and reinstalls. The tracked version remains a release version. Deleted source files disappear on reinstall. The public and local copies should not both be enabled.
 

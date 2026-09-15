@@ -11,32 +11,15 @@
 # in a conversation about the phrases themselves.
 set -uo pipefail
 
+script_dir=$(cd "$(dirname "$0")" && pwd)
 input=$(cat)
-
-transcript=$(printf '%s' "$input" | jq -r '.transcript_path // ""' 2>/dev/null) || exit 0
-active=$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null) || exit 0
 
 # stop_hook_active means this hook already blocked once and Claude is coming
 # back round. Blocking again is how a Stop hook turns into an infinite loop.
+active=$(printf '%s' "$input" | jq -r '.stop_hook_active // false' 2>/dev/null) || exit 0
 [ "$active" = "true" ] && exit 0
-if printf '%s' "$input" | jq -e 'has("last_assistant_message")' >/dev/null; then
-    # Codex supplies the message directly; its transcript is not a stable API.
-    last=$(printf '%s' "$input" | jq -r '.last_assistant_message // ""')
-else
-[ -z "$transcript" ] && exit 0
-[ -f "$transcript" ] || exit 0
 
-# Last 400 lines is plenty to contain the final assistant message, and keeps
-# this cheap on a long session. Malformed lines are skipped rather than fatal.
-last=$(tail -n 400 "$transcript" 2>/dev/null \
-  | jq -R 'fromjson? // empty' 2>/dev/null \
-  | jq -s -r '[.[]
-      | select(.type == "assistant")
-      | .message.content[]?
-      | select(.type == "text")
-      | .text] | last // ""' 2>/dev/null) || exit 0
-fi
-
+last=$(printf '%s' "$input" | "$script_dir/last-message.sh")
 [ -z "$last" ] && exit 0
 
 # High-precision tells only. Each of these reads as "I made your decision and
