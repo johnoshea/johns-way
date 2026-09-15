@@ -96,3 +96,58 @@ test_does_not_skip_for_another_pre_commit_hook() {
     code=0; output=$(hook 'git commit -m "x"') || code=$?
     assert_eq 2 "$code"
 }
+
+test_blocks_a_message_with_a_sentence_over_25_words() {
+    make_repo
+    printf 'check:\n    true\n' > justfile
+    long="one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo twentythree twentyfour twentyfive twentysix."
+    code=0; output=$(hook "git commit -m \"$long\"") || code=$?
+    assert_eq 2 "$code"
+    assert_contains "$output" "25 words"
+}
+
+test_blocks_a_message_with_a_semicolon() {
+    make_repo
+    printf 'check:\n    true\n' > justfile
+    code=0; output=$(hook 'git commit -m "Add the thing; remove the other"') || code=$?
+    assert_eq 2 "$code"
+    assert_contains "$output" "semicolon"
+}
+
+test_reads_a_heredoc_message_and_joins_its_wrapped_lines() {
+    make_repo
+    printf 'check:\n    true\n' > justfile
+    # shellcheck disable=SC2016 # the string is the literal command the hook reads
+    cmd='git commit -m "$(cat <<'"'"'EOF'"'"'
+Add the thing
+
+one two three four five six seven eight nine ten eleven twelve thirteen
+fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone
+twentytwo twentythree twentyfour twentyfive twentysix.
+EOF
+)"'
+    code=0; output=$(hook "$cmd") || code=$?
+    assert_eq 2 "$code"
+    assert_contains "$output" "25 words"
+}
+
+test_passes_a_message_of_short_sentences() {
+    make_repo
+    printf 'check:\n    true\n' > justfile
+    # shellcheck disable=SC2016 # the string is the literal command the hook reads
+    cmd='git commit -m "$(cat <<'"'"'EOF'"'"'
+Add the thing to the module and the other thing too
+
+one two three four five six seven eight nine ten eleven twelve thirteen
+fourteen fifteen sixteen seventeen eighteen nineteen twenty. one two
+three four five six seven eight nine ten eleven twelve thirteen fourteen
+fifteen sixteen seventeen eighteen nineteen twenty.
+
+one two three four five six seven eight nine ten eleven twelve thirteen
+fourteen fifteen sixteen seventeen eighteen nineteen twenty
+
+Co-Authored-By: Someone <someone@example.com>
+EOF
+)"'
+    hook "$cmd"
+}

@@ -28,6 +28,36 @@ if printf '%s' "$unquoted" | grep -qE -- '(^|[[:space:]])(--no-verify|-[a-zA-Z]*
     exit 2
 fi
 
+# The message, read from every -m argument and every heredoc in the command.
+# A message given through -F or an editor is not seen.
+message=$(
+    printf '%s\n' "$command" | awk '
+        !inside && /<<-?[[:space:]]*.?[A-Za-z_]+/ {
+            rest = $0; sub(/.*<<-?[[:space:]]*/, "", rest); sub(/^[^A-Za-z_]/, "", rest)
+            match(rest, /^[A-Za-z_]+/); delimiter = substr(rest, 1, RLENGTH); inside = 1; next
+        }
+        inside { line = $0; sub(/^[[:space:]]+/, "", line) }
+        inside && line == delimiter { inside = 0; next }
+        inside { print }
+    '
+    printf '%s\n' "$command" | grep -oE -- "(-m|--message)[[:space:]=]+(\"[^\"]*\"|'[^']*')" \
+        | sed -E "s/^(-m|--message)[[:space:]=]+//; s/^[\"'](.*)[\"']\$/\1/" || true
+)
+
+# One idea per sentence: a semicolon joins two, and a sentence over 25 words
+# holds more than one. Wrapped lines are joined within a paragraph first.
+if printf '%s' "$message" | grep -q ';'; then
+    echo "Commit blocked: the message has a semicolon. Write two sentences." >&2
+    exit 2
+fi
+long=$(printf '%s\n' "$message" | awk 'BEGIN { RS = "" } { gsub(/\n/, " "); print }' \
+    | sed -E 's/([.!?])[[:space:]]+/\1\
+/g' | awk 'NF > 25')
+if [ -n "$long" ]; then
+    printf 'Commit blocked: a sentence in the message is over 25 words. One idea per sentence.\n%s\n' "$long" >&2
+    exit 2
+fi
+
 # git -C <path> commits in that repository rather than the working directory.
 repo=$(printf '%s' "$unquoted" | sed -nE 's/.*git[[:space:]]+-C[[:space:]]+([^[:space:]]+).*/\1/p')
 if [ -n "$repo" ]; then

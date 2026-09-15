@@ -39,7 +39,7 @@ _Avoid_: reminder, timer, nudge.
 **Gate**: a point where work stops and waits for the user: the crit round on a spec, the crit round on the review findings, and any question asked with AskUserQuestion. The gate hook blocks tool calls while a gate is open.
 _Avoid_: checkpoint, approval, sign-off.
 
-**Definition of done**: running the check target, pasting its real output, having README.md, CLAUDE.md, and CONTEXT.md describe what the code now does, and a commit message whose subject says what the change does to the files and whose body gives the why.
+**Definition of done**: running the check target, pasting its real output, having README.md, CLAUDE.md, and CONTEXT.md describe what the code now does, and a commit message in plain language whose subject says what the change does to the files and whose body gives the why.
 _Avoid_: done criteria, acceptance, DoD.
 
 **Reviewer**: the plugin's subagent that reviews a finished change with fresh context, against its spec and the design rules.
