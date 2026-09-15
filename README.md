@@ -1,6 +1,6 @@
 # johns-way
 
-A Claude Code and Codex plugin that gives the agent one fixed way of working on a codebase. It sizes every request before starting, writes a test before the code, writes a one-page spec before large work, records progress in git, and reviews finished work with fresh eyes. Hooks enforce the mechanical rules: every commit passes the project's checks and reads in short sentences, no dependency under 14 days old gets in, Python runs through uv, and a decision that belongs to the user is asked rather than announced.
+A Claude Code and Codex plugin that gives the agent one fixed way of working on a codebase. It sizes every request before starting, writes a test before the code, writes a one-page spec before large work, records progress in git, reviews finished work with fresh eyes, and sends every commit message to a reader with no session context before committing. Hooks enforce the mechanical rules: every commit passes the project's checks and reads in short sentences, no dependency under 14 days old gets in, Python runs through uv, and a decision that belongs to the user is asked rather than announced.
 
 It is built for one person working alone and committing straight to main. It is opinionated. The [design](docs/design.md) says what it does and why.
 
