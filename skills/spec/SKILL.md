@@ -9,7 +9,7 @@ One file at `docs/specs/YYYY-MM-DD-<topic>.md`, one page unless the approach nee
 
 ## Sections, in order
 
-1. **Problem.** One paragraph: who hits it, what triggers it, what they do today.
+1. **Problem.** One paragraph: who hits it, what triggers it, what they do today, and how they will tell it is fixed. It carries the purpose agreed in requirements.
 2. **Non-goals.** What this change leaves alone.
 3. **Approach.** Components and data. Which parts are core, taking data and returning data, and which are shell, performing effects. For each component, one line saying what a caller gives it and gets back. That is its interface, judged for depth here, before any code exists. Apply the design-rules skill.
 4. **Alternatives considered.** Rejected options and why. This is the decision record; there are no ADRs.
@@ -29,7 +29,7 @@ Before presenting the draft, read it as an adversary and list numbered challenge
 
 - Contradictions between sections.
 - Ambiguity an implementer would have to guess at.
-- Scope: anything here that is a separate change. Anything the problem implies that the approach omits.
+- Scope: anything here that is a separate change. Any component or task the Problem paragraph has no use for. Anything the problem implies that the approach omits.
 - Feasibility against the actual code. Read the files the approach touches.
 - Tasks that are more than one commit's worth, or whose tests are not stated.
 

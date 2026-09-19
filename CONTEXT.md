@@ -12,6 +12,9 @@ _Avoid_: escalate, promote.
 **Downgrade**: moving a request to a smaller path mid-task, at once and without asking.
 _Avoid_: de-escalate, demote.
 
+**Purpose**: the outcome the user is after, who it is for, and how the user will tell it worked, written back at the head of the first requirements round.
+_Avoid_: intent, goal, motivation.
+
 **Spec**: the one file per full-path feature, under `docs/specs/`, holding the design and its ordered task list.
 _Avoid_: plan, design doc, RFC.
 
@@ -60,5 +63,6 @@ _Avoid_: deployment, release.
 ## Relationships
 
 A **Spec** holds many **Tasks**, and each **Task** is completed by one commit carrying **Trailers**.
+A **Spec**'s Problem paragraph carries the **Purpose**.
 **Routing** puts a request on a **Path**, and an **Upgrade** or **Downgrade** moves it to another.
 The **Check** runs the **Cooldown** and then the **Check target**.

@@ -1,6 +1,6 @@
 ---
 name: requirements
-description: Requirements gathering for medium and full work. Rounds of questions with a recommended answer each, asking only what would change the design. Consult before designing anything that touches an interface, a second module, or persisted data, or that is new.
+description: Requirements gathering for medium and full work. The purpose first, written back for the user to correct. Then rounds of questions with a recommended answer each, asking only what would change the design. Consult before designing anything that touches an interface, a second module, or persisted data, or that is new.
 ---
 
 # Requirements
@@ -13,11 +13,19 @@ Read first. Facts are the model's job: the code, the tests, the docs, recent com
 
 Check the request's terms against CONTEXT.md and raise conflicts at once; see the domain-language skill.
 
+## Purpose
+
+The purpose has three parts: the outcome the user is after, who it is for, and how the user will tell it worked. A request often names a feature. The purpose is what the user will do once the feature exists. Take it from the request, the issue, and the repo.
+
+Write the purpose back in two or three lines at the head of the first round. Mark each line as said or assumed. The user corrects it while answering. When there is no round to ask, the lines head the design message.
+
+When a part is missing and nothing read supplies it, the first round is the purpose question alone. Every other question depends on its answer.
+
 ## Rounds
 
 Ask every question whose prerequisites are settled in one numbered round. Each question carries a recommended answer as a starting point. The user answers in whatever depth the decision needs.
 
-Ask only about decisions that are expensive to reverse. Everything else gets a stated default in the design, which the user corrects there. The expensive decisions:
+After the purpose, ask only about decisions that are expensive to reverse. Everything else gets a stated default in the design, which the user corrects there. The expensive decisions:
 
 - what persists, and its shape
 - what runs concurrently, or must survive a restart
@@ -32,5 +40,9 @@ A round that settles nothing is the signal to draft instead: put two drafts in f
 Stop when answers stop changing the design. After three rounds, list the questions still open and wait. The user answers them, or says to draft with them left open.
 
 ## Output
+
+The purpose travels with the design. It is the first line of the medium design message and part of the spec's Problem paragraph. A feature or component the purpose has no use for is dropped.
+
+An answer settles the questions in its round and nothing later. The design message, the spec, and the crit gate still follow, unless the user names a smaller path.
 
 Medium path: the design as one chat message, as routing describes. Full path: the spec skill, with any open questions carried into the spec's Open questions section.
