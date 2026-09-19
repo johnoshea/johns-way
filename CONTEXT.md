@@ -12,7 +12,7 @@ _Avoid_: escalate, promote.
 **Downgrade**: moving a request to a smaller path mid-task, at once and without asking.
 _Avoid_: de-escalate, demote.
 
-**Purpose**: the outcome the user is after, who it is for, and how the user will tell it worked, written back at the head of the first requirements round.
+**Purpose**: the outcome the user is after, who it is for, and how the user will tell it worked.
 _Avoid_: intent, goal, motivation.
 
 **Spec**: the one file per full-path feature, under `docs/specs/`, holding the design and its ordered task list.

@@ -17,7 +17,7 @@ Check the request's terms against CONTEXT.md and raise conflicts at once; see th
 
 The purpose has three parts: the outcome the user is after, who it is for, and how the user will tell it worked. A request often names a feature. The purpose is what the user will do once the feature exists. Take it from the request, the issue, and the repo.
 
-Write the purpose back in two or three lines at the head of the first round. Mark each line as said or assumed. The user corrects it while answering. When there is no round to ask, the lines head the design message.
+Write the purpose back in two or three lines at the head of the first round. Mark each line as said or assumed. An assumed line that would change the design becomes a question in that round. The user corrects the purpose while answering. When there are no questions to ask, the lines head the design message.
 
 When a part is missing and nothing read supplies it, the first round is the purpose question alone. Every other question depends on its answer.
 
@@ -40,8 +40,6 @@ A round that settles nothing is the signal to draft instead: put two drafts in f
 Stop when answers stop changing the design. After three rounds, list the questions still open and wait. The user answers them, or says to draft with them left open.
 
 ## Output
-
-The purpose travels with the design. It is the first line of the medium design message and part of the spec's Problem paragraph. A feature or component the purpose has no use for is dropped.
 
 An answer settles the questions in its round and nothing later. The design message, the spec, and the crit gate still follow, unless the user names a smaller path.
 
