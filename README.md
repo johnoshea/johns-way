@@ -97,7 +97,7 @@ Git is the progress record, and the spec is never edited to track it. At the sta
 | check-in | PostToolUse | Once per session, after the minutes in `JOHNS_WAY_CHECKIN_MINUTES`, 60 by default, asks whether medium work should upgrade |
 | enforce-uv | PreToolUse on Bash | Blocks direct python and pip in favour of uv |
 | ask-dont-announce | Stop | Blocks a turn that announces a decision and invites an objection, and sends Claude back to ask |
-| plain-reply | Stop | Blocks a turn whose last message has a sentence over 25 words or a semicolon, and sends Claude back to rewrite them |
+| plain-reply | Stop | Blocks a turn whose last message has a sentence over 25 words or a semicolon, or has over 250 words and a first heading other than Summary. Sends Claude back to rewrite it |
 | gate | Stop, PreToolUse, PostToolUse, UserPromptSubmit | Holds the session at a crit gate: blocks tool calls until the user's next message, and holds when a background task finishes meanwhile |
 
 The check target is `just check` where the justfile has a check recipe, otherwise pytest and ruff through uv where there is a pyproject.toml. The cooldown reads the staged `uv.lock` and any `uses:` lines added to workflow files, and blocks a version released under 14 days ago.
