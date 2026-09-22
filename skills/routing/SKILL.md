@@ -31,7 +31,7 @@ When the session check-in message arrives during a medium task, stop and ask wit
 
 ## Subagents
 
-Implementation runs in the main context. Subagents do three jobs only. Fact-finding during requirements runs in the background. Each medium or full task gets one review. Each commit message, and each reply that explains how something works, gets one cold reader, dispatched by the plainly skill.
+Implementation runs in the main context. Subagents do two jobs only. Fact-finding during requirements runs in the background. Each medium or full task gets one review.
 
 ## Definition of done
 

@@ -1,7 +1,7 @@
 {
   "name": "johns-way",
   "description": "Skills and hooks for how John works: routing by size, Canon TDD, specs, review, and git-tracked progress.",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "author": {
     "name": "John O'Shea"
   },
