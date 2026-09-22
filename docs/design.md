@@ -115,7 +115,7 @@ Each entry gives the trigger, what the skill does, and what it produces.
 
 **ask-dont-announce.** Stop. Blocks a turn whose last message announces a decision and invites an objection, and sends the model back to ask with AskUserQuestion.
 
-**plain-reply.** Stop. Blocks a turn whose last message has a sentence over 25 words or a semicolon, skipping code blocks, inline code, and table rows, and sends the model back to rewrite those sentences. The check lives in `long-sentences.sh`, and the commit check applies it to commit messages. Both Stop checks read the last message through `last-message.sh`. A written rule alone left replies and commit messages in packed sentences.
+**plain-reply.** Stop, off. `hooks/hooks.json` leaves it unregistered, so the user sees replies in the model's own wording. When registered, it blocks a turn whose last message has a sentence over 25 words or a semicolon, skipping code blocks, inline code, and table rows, and sends the model back to rewrite those sentences. The check lives in `long-sentences.sh`, and the commit check applies it to commit messages. Both Stop checks read the last message through `last-message.sh`. A written rule alone left replies and commit messages in packed sentences.
 
 The same hook blocks a last message of over 250 words whose first heading is not Summary. Words in code blocks and table rows are not counted. A Summary heading below another heading does not pass, because a closing summary still leaves the reader to get through the detail first. When a message fails both checks, one block reports both, because the hook never blocks twice in a row. A written rule to report only what the reader can act on left long replies that opened with their evidence.
 
