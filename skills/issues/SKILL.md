@@ -19,11 +19,11 @@ An existing issue is the input to requirements. Read it, its comments, and anyth
 - Features: context, and acceptance criteria written as a test list. That list is the tdd skill's first step when the work starts.
 - Follow-ups from a spec or a review: one issue per concern, linking the spec. Split rather than bundle.
 
-Write for someone who was not in the session: the rule or the fact, never the episode. No session shorthand, no hostnames.
+Write for someone who was not in the session: the rule or the fact, never the episode. No session shorthand, no hostnames. Run the plainly skill on the title and body before `gh issue create`.
 
 ## Updating
 
-Comment when something changes that a reader would need. Never close an issue, mark it done, or record a decision in it unless the user said so in this session.
+Comment when something changes that a reader would need. Run the plainly skill on the comment before posting it. Never close an issue, mark it done, or record a decision in it unless the user said so in this session.
 
 ## When to file rather than fix
 

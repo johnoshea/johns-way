@@ -24,4 +24,4 @@ A diff above roughly 400 changed lines gets a proposal to split before it is ope
 
 ## Mechanics
 
-`gh pr create` with the description as the body. Draft when the work is not ready for review. Follow the repository's branch naming and merge conventions; read a recent merged pull request to learn them before opening the first one. Never force-push a branch someone else has commits on.
+Run the plainly skill on the description. Then `gh pr create` with the description as the body. Draft when the work is not ready for review. Follow the repository's branch naming and merge conventions; read a recent merged pull request to learn them before opening the first one. Never force-push a branch someone else has commits on.
