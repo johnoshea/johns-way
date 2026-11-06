@@ -46,7 +46,7 @@ if [ -n "$words" ]; then
     [ -n "$reason" ] && reason+="
 
 "
-    reason+="Your last message has $words words and its first heading is not Summary. Over 250 words, the reader must learn what to do before reading the detail. Open with a Summary heading and a few short sentences: what happened, whether anything is at risk, and what the reader should do. Then cut the detail nobody asked for."
+    reason+="Your last message has $words words and its first heading is not Summary. Over 250 words, the reader must learn what to do before reading the detail. Open with a Summary heading and a few short sentences: what happened and what the reader should do. If anything is at risk, say so. Then cut the detail nobody asked for."
 fi
 
 [ -z "$reason" ] && exit 0

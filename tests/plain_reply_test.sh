@@ -43,6 +43,10 @@ error: a; b
 That is all.")"
 }
 
+test_a_full_stop_inside_closing_quotes_ends_the_sentence() {
+    assert_eq "" "$(hook_with_last_message 'The block message said to open with "what happened, what is at risk, and what to do." I treated that as a checklist and wrote one sentence per part.')"
+}
+
 test_inline_code_is_not_checked() {
     assert_eq "" "$(hook_with_last_message "Run \`a; b\` to see it.")"
 }

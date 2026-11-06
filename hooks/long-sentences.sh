@@ -14,6 +14,6 @@ awk '
 ' \
 | sed -E "s/\`[^\`]*\`//g" \
 | awk 'BEGIN { RS = "" } { gsub(/\n/, " "); print }' \
-| sed -E 's/([.!?])[[:space:]]+/\1\
+| sed -E 's/([.!?]"?)[[:space:]]+/\1\
 /g' \
 | awk 'NF > 25 || /;/' || true
