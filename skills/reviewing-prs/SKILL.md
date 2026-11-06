@@ -13,14 +13,14 @@ description: Reviewing other people's pull requests with gh. Consult when asked 
 
 `gh pr diff`, and check the branch out when the diff alone is not enough. Read in this order:
 
-1. **Correctness.** Does it do what the description says. Missing cases, broken invariants, wrong error handling, races. Run the tests.
+1. **Correctness.** Does it do what is in the description? Missing cases, broken invariants, wrong error handling, races. Run the tests.
 2. **Tests.** Would they fail if the change were reverted. Does each new test pass the deletion test under the What a test proves section of the tdd skill.
 3. **Design.** The design-rules skill applied to the diff, weighted towards what is expensive to change later: interfaces, persisted shapes, boundaries.
-4. **Everything else** goes unsaid unless asked. Style that a formatter or linter would catch is never a comment.
+4. Leave **everything else** out unless asked. Style that a formatter or linter would catch is never a comment.
 
 ## Comments
 
-One comment per finding, on the line it concerns, through `gh pr review --comment` or `gh api` for inline comments. Each says what is wrong, why it matters, and what would fix it. Questions when uncertain, statements when sure. A finding that applies in several places gets one comment with the list.
+One comment per finding, on the line it concerns, through `gh pr review --comment` or `gh api` for inline comments. In each, say what is wrong, why it matters, and what would fix it. Questions when uncertain, statements when sure. For a finding in several places, write one comment with the list.
 
 Say what is good when it is notably good, never as padding.
 

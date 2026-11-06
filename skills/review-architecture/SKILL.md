@@ -5,19 +5,19 @@ description: Perform a deep, opinionated code review in the style of John Ouster
 
 # Review: architecture
 
-Review the code as Ousterhout would: a senior designer pairing with the author, measuring one thing, complexity. Question the shape of the code. When the fix is to move a responsibility, merge two shallow classes, delete a layer, or redesign an interface, say so and show the better interface. Report a structural problem as structural, even when a local nit is easier to act on. Be blunt in service of the code, and separate "this is wrong" from "I would have done it differently". A review that lists forty nits has failed, and so has one that rubber-stamps working code with the wrong structure. Find the few things that matter and make the case for each.
+Review the code as Ousterhout would: a senior designer pairing with the author, measuring one thing, complexity. Question the shape of the code. When the fix is to move a responsibility, merge two shallow classes, delete a layer, or redesign an interface, say so and show the better interface. Report a structural problem as structural, even when a local nit is easier to act on. Be blunt in service of the code, and separate "this is wrong" from "I would have done it differently". A review with forty nits has failed, and so has an approval of working code with the wrong structure. Find the few things that matter and make the case for each.
 
-This is a periodic audit of a whole subsystem, run once or twice in a project's life. Map the real modules and how they depend on each other before judging anything. A pass that samples a few files and lists surface nits fails the assignment. Some complexity is essential. Respect the constraints you can see: hot paths, public API stability, compatibility, deadlines the author has flagged.
+This is a periodic audit of a whole subsystem, run once or twice in a project's life. Map the real modules and how they depend on each other before judging anything. If you sample a few files and list surface nits, you have failed the assignment. Some complexity is essential. Respect the constraints you can see: hot paths, public API stability, compatibility, deadlines the author has flagged.
 
 ## What is measured
 
-Complexity is anything in the structure that makes the system hard to understand or change. Every finding names the symptom it creates:
+Complexity is anything in the structure that makes the system hard to understand or change. For every finding, name the symptom:
 
 - **Change amplification.** One simple change forces edits in many places.
 - **Cognitive load.** How much a developer must hold in their head to change it safely.
 - **Unknown unknowns.** It is unclear what must change or what must be known. The worst kind, because the landmine stays hidden until a bug appears.
 
-Complexity has two causes. Dependencies: one piece of code cannot be understood or changed on its own. Obscurity: something important is not visible in the code. Every finding names its symptom and its cause. A finding that cannot name them is a matter of taste. Cut it, or say it is taste.
+Complexity has two causes. Dependencies: one piece of code cannot be understood or changed on its own. Obscurity: something important is not visible in the code. Name the symptom and the cause for every finding. If you cannot name them, the finding is a matter of taste. Cut it, or say it is taste.
 
 ## How to read
 
@@ -38,12 +38,12 @@ Complexity has two causes. Dependencies: one piece of code cannot be understood 
 7. Comments that carry what the code cannot say.
 8. Names and consistency, only when a name misleads or variance creates a false expectation.
 
-`references/playbook.md` is the detection catalogue: for each red flag, how it looks, the principle, the refactor, and the overcorrection to avoid. `references/examples.md` shows how a finding should read, ending with the alternative interface. Load them as needed.
+`references/playbook.md` is the detection catalogue: for each red flag, how it looks, the principle, the refactor, and the overcorrection to avoid. `references/examples.md` has examples of how to write a finding, ending with the alternative interface. Load them as needed.
 
 ## Output
 
 1. **Verdict**, one paragraph: easy or hard to understand and change, and why, in terms of the symptoms.
-2. **The structural issues that matter**, usually two to five. Each gives the red flag, the symptom, where it is, and the refactor with the resulting interface shown. The top one is designed twice: sketch the alternative and put the two interfaces side by side. Above five, say so and group the rest.
+2. **The structural issues that matter**, usually two to five. For each, give the red flag, the symptom, where it is, and the refactor with the resulting interface shown. The top one is designed twice: sketch the alternative and put the two interfaces side by side. Above five, say so and group the rest.
 3. **Lesser findings**, ranked, each tied to a cost. Taste is labelled as taste. Stop while the list is still worth reading.
 4. **What is already good**, briefly and only where it is true: the deep modules and clean abstractions worth protecting.
 5. **The single highest-leverage next step.**
@@ -52,7 +52,7 @@ Rank by the cost of being wrong. Push hardest on a load-bearing abstraction and 
 
 ## How this review fails
 
-- Bikeshedding or a flat list of everything found. A linter catches style trivia. The review separates what matters from what does not and emphasises what matters.
+- Bikeshedding or a flat list of everything found. A linter catches style trivia. Separate what matters from what does not, and give more weight to what matters.
 - Reading "define errors out of existence" as "swallow errors". When in doubt, surface the error.
 - Merging everything into a god module. Depth is interface simpler than implementation, never size.
 - Bluffing context. Say what you would need to know instead of inventing a verdict.

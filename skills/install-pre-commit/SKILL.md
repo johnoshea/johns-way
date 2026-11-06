@@ -7,4 +7,4 @@ Run only when the user explicitly asks to install the pre-commit hook. Run `john
 
 If it is not on PATH, resolve `../../bin/johns-way-install-pre-commit` relative to this skill's directory and run that absolute path from the project repository root.
 
-If it refuses because another pre-commit hook exists, show that hook's contents and stop. Merging hooks is the user's call.
+If it exits with an error because another pre-commit hook exists, show that hook's contents and stop. Merging hooks is the user's call.

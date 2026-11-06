@@ -21,10 +21,10 @@ In Codex, use a fresh subagent with the instructions in `../../agents/reviewer.m
 
 ## Report
 
-Write the reviewer's findings to `review-findings.md` in the session's scratchpad directory, or under `$TMPDIR` when the host gives none. The file holds the spec path or the pasted design, the commit range, then the findings as the reviewer gave them, grouped by lens: matches the spec, then design rules, each with its file and line. Under any finding you disagree with, say why. End the file with the check target's output. Fixing starts after the user's comments.
+Write the reviewer's findings to `review-findings.md` in the session's scratchpad directory, or under `$TMPDIR` when the host gives none. In the file, put the spec path or the pasted design, the commit range, then the findings as the reviewer gave them, grouped by lens: matches the spec, then design rules, each with its file and line. Under any finding you disagree with, say why. End the file with the check target's output. Start fixing only after the user's comments.
 
 Send a PushNotification, when the host has that tool, with the number of findings ready for crit. In chat, give the count of findings under each lens, then print this with the real path and stop:
 
     crit <path to review-findings.md>
 
-Where the user's comments and the reviewer's findings disagree, the user's win. Fix what the user asks for, commit, and run the definition of done from routing.
+If the user's comments conflict with the reviewer's findings, follow the user's comments. Fix what the user asks for, commit, and run the definition of done from routing.

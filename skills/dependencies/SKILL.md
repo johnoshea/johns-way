@@ -9,22 +9,22 @@ A dependency version is adopted only when it is at least 14 days old. This cover
 
 ## Choosing a version
 
-Take the newest version that clears the cooldown. Look the release date up; never answer from memory.
+Take the newest version that is past the cooldown. Look the release date up; never answer from memory.
 
     johns-way-release-date pypi <name> <version>
     johns-way-release-date action <owner/repo> <ref>
 
 If the command is not on PATH, use `../../bin/johns-way-release-date` relative to this skill's directory.
 
-The first prints a package version's release time; PyPI's release history page lists the candidates. The second prints the date of the commit an Action's ref points at, which is what counts, because moving tags such as `v5` are re-pointed.
+The first prints a package version's release time; the candidates are on PyPI's release history page. The second prints the date of the commit an Action's ref points at, which is what counts, because moving tags such as `v5` are re-pointed.
 
 ## Python
 
-Use the latest stable Python release that clears the cooldown. Do not stay on an older one because it is installed. CI runs the same Python version as `pyproject.toml`; change both in the same commit.
+Use the latest stable Python release that is past the cooldown. Do not stay on an older one because it is installed. CI runs the same Python version as `pyproject.toml`; change both in the same commit.
 
 ## GitHub Actions
 
-When touching a workflow, update every Action in it to its newest version that clears the cooldown. Look each version up.
+When touching a workflow, update every Action in it to its newest version that is past the cooldown. Look each version up.
 
 ## Tooling
 

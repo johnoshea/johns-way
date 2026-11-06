@@ -11,20 +11,20 @@ Work in the main context. Use the tdd skill for every change and the design-rule
 
 The spec is committed before the first task. Work the tasks in its Tasks section in order. One task is one commit. Nothing in the spec is edited to track progress; the commits are the record.
 
-Each task's commit carries two trailers, which the SessionStart hook reads to compute progress:
+Add two trailers to each task's commit. The SessionStart hook reads them to compute progress:
 
     Spec: docs/specs/<file>.md
     Task: <number>
 
 ## Medium path: the chat design
 
-Commit each coherent piece as soon as it is green, with no trailers. When the session check-in arrives, stop and ask with AskUserQuestion whether to continue as medium or upgrade to full. If a medium task is interrupted before its last commit, the next session writes the chat design into a spec and continues on the full path.
+Commit each coherent piece as soon as it is green, with no trailers. When you receive the session check-in, stop and ask with AskUserQuestion whether to continue as medium or upgrade to full. If a medium task is interrupted before its last commit, in the next session, write the chat design into a spec and continue on the full path.
 
 ## Every commit
 
 - The commit check hook runs the dependency cooldown and the project's check target. A failing check is fixed, never skipped.
-- Update README.md, CLAUDE.md, and CONTEXT.md in the same commit as the code that changes what they describe. A new domain term goes into CONTEXT.md in the commit that introduces it; see the domain-language skill.
-- Commit straight to main. Work too big for one releasable commit goes behind a feature flag, never on a long-lived branch.
+- If README.md, CLAUDE.md, or CONTEXT.md is out of date after a code change, update it in the same commit. Add a new domain term to CONTEXT.md in the commit where it is first used; see the domain-language skill.
+- Commit straight to main. Put work too big for one releasable commit behind a feature flag, never on a long-lived branch.
 
 ## Resuming
 
@@ -32,7 +32,7 @@ The SessionStart hook prints any spec with unfinished tasks, its next task, and 
 
 ## When the spec is wrong
 
-Implementation sometimes shows that an approach, a task, or an assumption in the spec is wrong. Stop. State what is wrong and the proposed amendment, and ask with AskUserQuestion. On approval, add a dated entry to the spec's Amendments section giving what changed and why, commit that change on its own, and continue. The spec never changes silently.
+During implementation, you may find that an approach, a task, or an assumption in the spec is wrong. Stop. State what is wrong and the proposed amendment, and ask with AskUserQuestion. On approval, add a dated entry to the spec's Amendments section giving what changed and why, commit that change on its own, and continue. Never change the spec silently.
 
 ## Finishing
 

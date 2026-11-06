@@ -5,7 +5,7 @@ description: Creating pull requests with gh. Consult before opening or updating 
 
 # Pull requests
 
-Before a pull request is opened, the commit check has passed on every commit and the reviewing-own-work skill has run.
+Before a pull request is opened, the commit check has passed on every commit and you have run the reviewing-own-work skill.
 
 ## Description
 
@@ -16,11 +16,11 @@ Written for a reviewer who was not in the session:
 3. How to verify: the command to run, and what to look at by hand if anything.
 4. Breaking changes, if any.
 
-Link the issue with a closing keyword when the pull request finishes it. No test evidence in the description; the checks show it.
+Link the issue with a closing keyword when the pull request contains all the work for it. No test evidence in the description; the checks show it.
 
 ## Size
 
-A diff above roughly 400 changed lines gets a proposal to split before it is opened. One pull request per concern.
+For a diff above roughly 400 changed lines, propose a split before you open the pull request. One pull request per concern.
 
 ## Mechanics
 

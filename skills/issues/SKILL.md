@@ -5,11 +5,11 @@ description: Filing, reading, triaging, and updating GitHub issues with gh. Cons
 
 # Issues
 
-Issues hold work that is not being done now: found while working, out of scope, or blocked. The spec's task list holds work being done now. A piece of work is in one place or the other, never both.
+Issues contain work that is not being done now: found while working, out of scope, or blocked. The spec's task list contains work being done now. A piece of work is in one place or the other, never both.
 
 ## Reading
 
-An existing issue is the input to requirements. Read it, its comments, and anything it links before asking the user a single question.
+An existing issue is the input to requirements. Read it, its comments, and anything linked from it before asking the user a single question.
 
 ## Filing
 
@@ -27,4 +27,4 @@ Comment when something changes that a reader would need. Run the plainly skill o
 
 ## When to file rather than fix
 
-File when the fix is outside the current task's scope, when it needs a decision the user has not made, or when the design-rules skill says to fix an interface and that is out of scope. Say in one line that the issue was filed.
+File when the fix is outside the current task's scope, when it depends on a decision the user has not made, or when you would fix an interface under the design-rules skill and that is out of scope. Say in one line that the issue was filed.

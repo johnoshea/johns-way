@@ -21,7 +21,7 @@ _Avoid_: plan, design doc, RFC.
 **Task**: one numbered line under a spec's Tasks heading, completed by exactly one commit.
 _Avoid_: step, ticket, story.
 
-**Trailer**: a Spec line and a Task line at the end of a commit message, marking the task the commit completes.
+**Trailer**: a Spec line and a Task line at the end of a commit message, for the spec and the task completed by the commit.
 _Avoid_: tag, footer, label.
 
 **Amendment**: a dated entry in a spec recording a change made during implementation and why.
@@ -36,13 +36,13 @@ _Avoid_: pre-commit, validation, gate.
 **Cooldown**: the rule that a dependency version is adopted only once it is 14 days old.
 _Avoid_: quarantine, embargo, waiting period.
 
-**Session check-in**: the one message per session, after a time limit, that asks whether medium work should upgrade to full.
+**Session check-in**: the one message per session, after a time limit, with the question of whether to upgrade medium work to full.
 _Avoid_: reminder, timer, nudge.
 
 **Gate**: a point where work stops and waits for the user: the crit round on a spec, the crit round on the review findings, and any question asked with AskUserQuestion. The gate hook blocks tool calls while a gate is open.
 _Avoid_: checkpoint, approval, sign-off.
 
-**Definition of done**: running the check target, pasting its real output, having README.md, CLAUDE.md, and CONTEXT.md describe what the code now does, and a commit message in plain language whose subject says what the change does to the files and whose body gives the why.
+**Definition of done**: running the check target, pasting its real output, updating README.md, CLAUDE.md, and CONTEXT.md to match what the code now does, and writing a plain-language commit message: a subject with the change to the files, and a body with the reason.
 _Avoid_: done criteria, acceptance, DoD.
 
 **Reviewer**: the plugin's subagent that reviews a finished change with fresh context, against its spec and the design rules.
@@ -51,10 +51,10 @@ _Avoid_: critic, auditor, second opinion.
 **Cold reader**: a subagent given a draft, a commit message with its staged diff or a reply, with no session context, that reports what it cannot resolve from that alone.
 _Avoid_: fresh reader, stranger, second pair of eyes.
 
-**Deletion test**: imagining a module or a test deleted and naming what is lost: complexity that reappears across its callers, or a defect that goes uncaught.
+**Deletion test**: imagining a module or a test deleted and naming what is lost: complexity that must be repeated in its callers, or a defect that is no longer caught.
 _Avoid_: removal check, ablation.
 
-**Vacuous test**: a test that no plausible defect in the code under test would fail, or that fails only on a defect another test already catches.
+**Vacuous test**: a test that would pass with any plausible defect in the code under test, or that fails only on a defect another test already catches.
 _Avoid_: trivial test, redundant test, weak test, useless test.
 
 **Local install**: the development checkout linked into Claude Code and copied into a generated Codex marketplace, refreshed with `just install`.
@@ -62,7 +62,7 @@ _Avoid_: deployment, release.
 
 ## Relationships
 
-A **Spec** holds many **Tasks**, and each **Task** is completed by one commit carrying **Trailers**.
-A **Spec**'s Problem paragraph carries the **Purpose**.
-**Routing** puts a request on a **Path**, and an **Upgrade** or **Downgrade** moves it to another.
-The **Check** runs the **Cooldown** and then the **Check target**.
+A **Spec** contains many **Tasks**, and each **Task** is completed by one commit with **Trailers**.
+A **Spec**'s Problem paragraph contains the **Purpose**.
+Each request is on one **Path**. Claude chooses it during **Routing**, and changes it with an **Upgrade** or a **Downgrade**.
+The **Check** is the **Cooldown** followed by the **Check target**.

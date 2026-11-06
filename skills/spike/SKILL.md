@@ -5,7 +5,7 @@ description: Answering a feasibility question with throwaway code. Consult when 
 
 # Spike
 
-A spike answers a question. Its code never merges.
+A spike is for answering a question. Never merge its code.
 
 ## Before starting
 
@@ -13,12 +13,12 @@ State in chat, in three lines: the question, the turn budget, and what evidence 
 
 ## During
 
-Work on a throwaway branch, `git switch -c spike/<topic>`, or a worktree. No tests, no review, no design rules. Find out as cheaply as correctness allows. Commit on the branch as often as useful; none of it survives.
+Work on a throwaway branch, `git switch -c spike/<topic>`, or a worktree. No tests, no review, no design rules. Find out as cheaply as correctness allows. Commit on the branch as often as useful; all of it is deleted at the end.
 
 ## Ending
 
 End with a written answer of one paragraph in chat: what was tried, what was found, and the recommendation. If a spec exists, add the answer to its Alternatives considered or Open questions section and commit that.
 
-Then delete the branch: `git switch main` and `git branch -D spike/<topic>`. Real implementation starts from main, test-first, on its own path through routing. It may read the spike before deletion. It never merges or cherry-picks it.
+Then delete the branch: `git switch main` and `git branch -D spike/<topic>`. Start real implementation from main, test-first, on its own path through routing. You may read the spike before you delete it. Never merge or cherry-pick it.
 
-A spike that reaches its budget without an answer is reported as a failed spike, with what was learned. That is a result too.
+If the budget is used up without an answer, report a failed spike, with what was learned. That is a result too.

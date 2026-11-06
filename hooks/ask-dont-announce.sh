@@ -37,7 +37,7 @@ tells="say the word\
 
 if printf '%s' "$last" | grep -Eqi "$tells"; then
   cat <<'JSON'
-{"decision":"block","reason":"Your message ends by announcing a decision and inviting John to object. That is a question you chose not to ask.\n\nHis CLAUDE.md, under Human review gates: when a choice is his to make, ask it with AskUserQuestion and wait. Announcing your pick is not asking. He may not see the line, and interrupting you costs him far more than one turn costs you.\n\nDo one of these, then finish:\n1. If the choice really is his, call AskUserQuestion and stop there.\n2. If a rule or constraint blocks one option, say so and ask how he wants to proceed. A constraint that stops you doing something is never permission to decide for him.\n3. If it was never his call, delete the hedge and state the decision plainly."}
+{"decision":"block","reason":"Your message ends by announcing a decision and inviting John to object. That is a question you chose not to ask.\n\nHis CLAUDE.md, under Human review gates: when a choice is his to make, ask it with AskUserQuestion and wait. Announcing your pick is not asking. He may not see the line, and interrupting you costs him far more than one turn costs you.\n\nDo one of these, then finish:\n1. If the choice really is his, call AskUserQuestion and stop there.\n2. If one option breaks a rule or constraint, say so and ask how he wants to proceed. A constraint on one option is never permission to decide for him.\n3. If it was never his call, delete the hedge and state the decision plainly."}
 JSON
 fi
 
