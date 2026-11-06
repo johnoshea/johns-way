@@ -1,6 +1,6 @@
 ---
 name: review-security
-description: A deep, periodic security review of a codebase or subsystem with fresh eyes, in the manner of Kohnfelder's Designing Secure Software and the Saltzer and Schroeder principles, finding the weaknesses that have crept in and ranking them by what an attacker gains. Consult when asked for a security review, audit, or assessment, to find vulnerabilities or weaknesses, to check trust boundaries, input handling, authentication, authorisation, secrets, or cryptography, or to think like an attacker about the code. Compliance checklists and dependency scanning are out of scope.
+description: A deep, periodic security review of a codebase or subsystem with fresh eyes, in the manner of Kohnfelder's Designing Secure Software and the Saltzer and Schroeder principles, finding the weaknesses introduced over time and ranking them by what an attacker gains. Consult when asked for a security review, audit, or assessment, to find vulnerabilities or weaknesses, to check trust boundaries, input handling, authentication, authorisation, secrets, or cryptography, or to think like an attacker about the code. Compliance checklists and dependency scanning are out of scope.
 ---
 
 # Review: security

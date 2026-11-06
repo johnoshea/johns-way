@@ -1,6 +1,6 @@
 ---
 name: reviewing-own-work
-description: The review at the end of every medium and full task, before the done claim. Dispatches one reviewer with fresh context, relays its findings, and stops at the crit gate. Consult when the last task is committed.
+description: The review at the end of every medium and full task, before the done claim. Dispatch one reviewer with fresh context, pass on its findings, and stop at the crit gate. Consult when the last task is committed.
 ---
 
 # Reviewing own work

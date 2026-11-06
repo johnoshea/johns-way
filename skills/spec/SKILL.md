@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Writing the one-page spec for full work after requirements are gathered, including the pushback pass and the crit gate. Consult when the full path reaches the spec, or when the user asks for a spec or design document.
+description: Writing the one-page spec for full work after requirements are gathered, including the pushback pass and the crit gate. Consult at the spec step of the full path, or when the user asks for a spec or design document.
 ---
 
 # Spec

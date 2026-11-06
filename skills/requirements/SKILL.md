@@ -1,6 +1,6 @@
 ---
 name: requirements
-description: Requirements gathering for medium and full work. The purpose first, written back for the user to correct. Then rounds of questions with a recommended answer each, asking only what would change the design. Consult before designing anything that touches an interface, a second module, or persisted data, or that is new.
+description: Requirements gathering for medium and full work. The purpose first, written back for the user to correct. Then rounds of questions with a recommended answer each, asking only what would change the design. Consult before designing a change to an interface, a second module, or persisted data, or anything new.
 ---
 
 # Requirements

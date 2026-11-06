@@ -1,6 +1,6 @@
 ---
 name: install-pre-commit
-description: Only on explicit user request, install the johns-way check as this repository's git pre-commit hook, so commits made outside the agent run the same tests, lint, and dependency cooldown check.
+description: Only on explicit user request, install the johns-way check as this repository's git pre-commit hook, so the same tests, lint, and dependency cooldown check run on commits made outside the agent.
 ---
 
 Run only when the user explicitly asks to install the pre-commit hook. Run `johns-way-install-pre-commit` from the repository root and report its output in one line.

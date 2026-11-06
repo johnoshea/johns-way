@@ -1,6 +1,6 @@
 ---
 name: issues
-description: Filing, reading, triaging, and updating GitHub issues with gh. Consult whenever the task involves an issue or ticket, when work found mid-task needs deferring, or when a spec or review produces follow-up work.
+description: Filing, reading, triaging, and updating GitHub issues with gh. Consult whenever the task involves an issue or ticket, when work found mid-task needs deferring, or when you find follow-up work while writing a spec or doing a review.
 ---
 
 # Issues
