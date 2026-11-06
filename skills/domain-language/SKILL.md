@@ -16,7 +16,7 @@ One entry per term:
     **Order**: a customer's request to buy, from checkout until fulfilled or cancelled.
     _Avoid_: purchase, transaction, basket.
 
-A Relationships section may follow, one line each: "An **Order** holds many **Line items**."
+After the entries, you may add a Relationships section, one line each, with a state verb such as has, is, or contains: "An **Order** has many **Line items**."
 
 ## When
 
